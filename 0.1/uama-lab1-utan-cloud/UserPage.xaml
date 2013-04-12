@@ -32,7 +32,7 @@
             <TextBlock Height="30" HorizontalAlignment="Left" Margin="12,42,0,0" Name="userNameTextBlock" Text="" VerticalAlignment="Top" Width="438" />
             <TextBlock Height="30" HorizontalAlignment="Left" Margin="12,78,0,0" Name="calculationsTextBlock" Text="Calculations" VerticalAlignment="Top" Width="438" />
             <ListBox Height="409" HorizontalAlignment="Left" Margin="12,114,0,0" Name="calculationsListBox" VerticalAlignment="Top" Width="438" />
-            <Button Content="New calculation" Height="72" HorizontalAlignment="Left" Margin="12,529,0,0" Name="newCalculationButton" VerticalAlignment="Top" Width="438" />
+            <Button Content="New calculation" Height="72" HorizontalAlignment="Left" Margin="12,529,0,0" Name="newCalculationButton" VerticalAlignment="Top" Width="438" Click="newCalculationButton_Click" />
         </Grid>
     </Grid>
  
