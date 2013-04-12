@@ -13,16 +13,11 @@ using Microsoft.Phone.Controls;
 
 namespace uama_lab1_utan_cloud
 {
-    public partial class UserPage : PhoneApplicationPage
+    public partial class NewCalculation : PhoneApplicationPage
     {
-        public UserPage()
+        public NewCalculation()
         {
             InitializeComponent();
-        }
-
-        private void newCalculationButton_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/NewCalculation.xaml", UriKind.Relative));
         }
     }
 }

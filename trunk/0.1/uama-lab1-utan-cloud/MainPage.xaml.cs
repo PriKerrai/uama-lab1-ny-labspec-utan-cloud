@@ -20,5 +20,10 @@ namespace uama_lab1_utan_cloud
         {
             InitializeComponent();
         }
+
+        private void logInButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/UserPage.xaml", UriKind.Relative));
+        }
     }
 }
