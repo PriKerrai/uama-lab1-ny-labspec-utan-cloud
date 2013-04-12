@@ -23,11 +23,18 @@
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
             <TextBlock x:Name="ApplicationTitle" Text="MY APPLICATION" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="page name" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="PageTitle" Text="Log in" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0"></Grid>
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <TextBlock Height="30" HorizontalAlignment="Left" Margin="12,6,0,0" Name="userNameTextBlock" Text="User name" VerticalAlignment="Top" Width="438" />
+            <TextBox Height="72" HorizontalAlignment="Left" Margin="12,28,0,0" Name="userNameTextBox" Text="" VerticalAlignment="Top" Width="438" />
+            <TextBlock Height="30" HorizontalAlignment="Left" Margin="12,106,0,0" Name="passwordTextBlock" Text="Password" VerticalAlignment="Top" Width="438" />
+            <TextBox Height="72" HorizontalAlignment="Left" Margin="12,142,0,0" Name="passwordTextBox" Text="" VerticalAlignment="Top" Width="438" />
+            <Button Content="Log in" Height="72" HorizontalAlignment="Left" Margin="12,220,0,0" Name="logInButton" VerticalAlignment="Top" Width="215" />
+            <Button Content="New user" Height="72" HorizontalAlignment="Left" Margin="233,220,0,0" Name="newUserButton" VerticalAlignment="Top" Width="223" />
+        </Grid>
     </Grid>
  
     <!--Sample code showing usage of ApplicationBar-->
