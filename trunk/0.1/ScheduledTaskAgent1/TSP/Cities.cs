@@ -10,7 +10,8 @@ namespace ScheduledTaskAgent1.TSP
 
             private int[] x = new int[70];
             private int[] y = new int[70];
-            private string[] CityNames = {
+            
+            private string[] cityNames = {
             "Stockholm",
             "Goteborg",
             "Malmo",
@@ -103,8 +104,13 @@ namespace ScheduledTaskAgent1.TSP
 
                 for (int i = 0; i < 70; i++)
                 {
-                    Cities[i] = new City(CityNames[i], x[i], y[i]);
+                    Cities[i] = new City(cityNames[i], x[i], y[i]);
                 }
+            }
+
+            public String[] CityNames
+            {
+                get { return cityNames; }
             }
     }
 

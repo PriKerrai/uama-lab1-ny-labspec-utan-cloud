@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
+using ScheduledTaskAgent1.TSP;
 
 namespace uama_lab1_utan_cloud
 {
@@ -18,6 +19,12 @@ namespace uama_lab1_utan_cloud
         public NewCalculation()
         {
             InitializeComponent();
+        }
+
+        public void initCities()
+        {
+            Cities cities = new Cities();
+            string[] s = cities.CityNames;
         }
     }
 }
