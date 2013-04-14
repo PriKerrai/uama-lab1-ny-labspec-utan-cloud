@@ -62,7 +62,7 @@ public class TSP
 
         for (i = 0; i < NumberOfNodes; i++)
         {
-            Console.WriteLine(cheapest_path[i];
+            Console.WriteLine(cheapest_path[i]);
         }
 
         result = Convert.ToInt16(cheapest_cost);
