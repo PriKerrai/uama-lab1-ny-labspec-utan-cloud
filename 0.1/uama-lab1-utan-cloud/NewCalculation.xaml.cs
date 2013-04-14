@@ -19,12 +19,39 @@ namespace uama_lab1_utan_cloud
         public NewCalculation()
         {
             InitializeComponent();
+            PopulateAllCitiesListBox();
         }
 
+        // usage?
         public void initCities()
         {
             Cities cities = new Cities();
             string[] s = cities.CityNames;
+        }
+
+        private void PopulateAllCitiesListBox()
+        {
+            Cities cities = new Cities();
+            string [] s = cities.CityNames;
+
+            List<string> allCities = new List<string>(s);
+
+            allCitiesListBox.ItemsSource = allCities;
+        }
+
+        private void createCalculationButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void allCitiesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (null != allCitiesListBox.SelectedItem)
+            {
+                string cityName = (string)allCitiesListBox.SelectedItem;
+
+                citiesToVisitListBox.Items.Add(cityName);
+            }
         }
     }
 }

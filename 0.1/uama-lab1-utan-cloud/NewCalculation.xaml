@@ -28,11 +28,11 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <TextBlock Height="30" HorizontalAlignment="Left" Margin="12,6,0,0" Name="addCityTextBlock" Text="Add city to visit" VerticalAlignment="Top" Width="438" />
-            <ListBox Height="217" HorizontalAlignment="Left" Margin="12,42,0,0" Name="allCitiesListBox" VerticalAlignment="Top" Width="438" />
-            <TextBlock Height="30" HorizontalAlignment="Left" Margin="12,265,0,0" Name="citiesToVisitTextBlock" Text="Cities to be visited" VerticalAlignment="Top" Width="438" />
+            <TextBlock Height="30" HorizontalAlignment="Left" Margin="12,6,0,0" Name="addCityTextBlock" Text="Add city to visit" VerticalAlignment="Top" Width="438" FontSize="24" />
+            <ListBox Height="217" HorizontalAlignment="Left" Margin="12,42,0,0" Name="allCitiesListBox" VerticalAlignment="Top" Width="438" SelectionChanged="allCitiesListBox_SelectionChanged" />
+            <TextBlock Height="30" HorizontalAlignment="Left" Margin="12,265,0,0" Name="citiesToVisitTextBlock" Text="Cities to be visited" VerticalAlignment="Top" Width="438" FontSize="24" />
             <ListBox Height="232" HorizontalAlignment="Left" Margin="12,301,0,0" Name="citiesToVisitListBox" VerticalAlignment="Top" Width="438" />
-            <Button Content="Create calculation" Height="72" HorizontalAlignment="Left" Margin="12,539,0,0" Name="createCalculationButton" VerticalAlignment="Top" Width="438" />
+            <Button Content="Create calculation" Height="72" HorizontalAlignment="Left" Margin="12,539,0,0" Name="createCalculationButton" VerticalAlignment="Top" Width="438" Click="createCalculationButton_Click" />
         </Grid>
     </Grid>
  
