@@ -41,7 +41,9 @@ namespace uama_lab1_utan_cloud
 
         private void createCalculationButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            string[] citiesToVisit = new string[allCitiesListBox.Items.Count];
+
+            allCitiesListBox.Items.CopyTo(citiesToVisit, 0);
         }
 
         private void allCitiesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
