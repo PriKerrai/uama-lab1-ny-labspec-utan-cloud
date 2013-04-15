@@ -10,7 +10,9 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
+using ScheduledTaskAgent1;
 using ScheduledTaskAgent1.TSP;
+using Microsoft.Phone.Scheduler;
 
 namespace uama_lab1_utan_cloud
 {
@@ -44,6 +46,10 @@ namespace uama_lab1_utan_cloud
             string[] citiesToVisit = new string[citiesToVisitListBox.Items.Count];
 
             citiesToVisitListBox.Items.CopyTo(citiesToVisit, 0);
+
+            TSPScheduledAgent tspAgent = new TSPScheduledAgent();
+
+
         }
 
         private void allCitiesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
