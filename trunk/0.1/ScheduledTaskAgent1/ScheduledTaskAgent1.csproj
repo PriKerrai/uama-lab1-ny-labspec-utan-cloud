@@ -51,7 +51,7 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ScheduledAgent.cs" />
+    <Compile Include="TSPScheduledAgent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TSP\Cities.cs" />
     <Compile Include="TSP\City.cs" />
