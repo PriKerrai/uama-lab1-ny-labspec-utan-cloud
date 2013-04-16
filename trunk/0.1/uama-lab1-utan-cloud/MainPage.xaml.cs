@@ -30,5 +30,10 @@ namespace uama_lab1_utan_cloud
         {
             NavigationService.Navigate(new Uri("/Karl_testar/TSPCalculation.xaml", UriKind.Relative));
         }
+
+        private void backgroundWorkerButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Karl_testar/BackgroundWorkerTest.xaml", UriKind.Relative));
+        }
     }
 }
