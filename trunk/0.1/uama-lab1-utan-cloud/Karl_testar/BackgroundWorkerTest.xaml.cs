@@ -11,6 +11,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using System.ComponentModel;
+using Microsoft.Phone.Shell;
 
 namespace uama_lab1_utan_cloud.Karl_testar
 {
@@ -57,6 +58,11 @@ namespace uama_lab1_utan_cloud.Karl_testar
             else
             {
                 MessageBox.Show("Worker finished.");
+
+                ShellToast toast = new ShellToast();
+                toast.Content = "Worker finished.";
+                toast.Title = "TSP calculation";
+                toast.Show();
             }
         }
     }
