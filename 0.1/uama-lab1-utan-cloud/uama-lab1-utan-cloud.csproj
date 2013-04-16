@@ -64,6 +64,9 @@
     <Compile Include="Karl_testar\BackgroundWorkerTest.xaml.cs">
       <DependentUpon>BackgroundWorkerTest.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Karl_testar\ScheduledAgentTest.xaml.cs">
+      <DependentUpon>ScheduledAgentTest.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -81,8 +84,12 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Page Include="Karl_testar\BackgroundWorkerTest.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Karl_testar\ScheduledAgentTest.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>

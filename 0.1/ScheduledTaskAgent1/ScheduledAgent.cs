@@ -46,35 +46,21 @@ namespace ScheduledTaskAgent1
         /// </remarks>
         protected override void OnInvoke(ScheduledTask task)
         {
-            //TODO: Add code to perform your task in background
-            string toastMessage = "";
+            // wait 9 seconds
+            //System.Threading.Thread.Sleep(9000);
 
-            // If your application uses both PeriodicTask and ResourceIntensiveTask
-            // you can branch your application code here. Otherwise, you don't need to.
-            if (task is PeriodicTask)
-            {
-                // Execute periodic task actions here.
-                toastMessage = "Periodic task running.";
-            }
-            else
-            {
-                // Execute resource-intensive task actions here.
-                toastMessage = "Resource-intensive task running.";
-            }
+            //TODO: Add code to perform your task in background
 
             // Launch a toast to show that the agent is running.
             // The toast will not be shown if the foreground application is running.
             ShellToast toast = new ShellToast();
-            toast.Title = "Background Agent Sample";
-            toast.Content = toastMessage;
+            toast.Title = "TASK IS NOW RUNNING ;D";
+            toast.Content = "Task is now running.";
+            toast.NavigationUri = new System.Uri("/Karl_testar/ScheduledAgentTest.xaml", System.UriKind.Relative);
             toast.Show();
 
-            // If debugging is enabled, launch the agent again in one minute.
-            #if DEBUG_AGENT
-              ScheduledActionService.LaunchForTest(task.Name, TimeSpan.FromSeconds(60));
-            #endif
+            ScheduledActionService.LaunchForTest(task.Name, System.TimeSpan.FromSeconds(3)); 
 
-            // Call NotifyComplete to let the system know the agent is done working.
             NotifyComplete();
         }
     }

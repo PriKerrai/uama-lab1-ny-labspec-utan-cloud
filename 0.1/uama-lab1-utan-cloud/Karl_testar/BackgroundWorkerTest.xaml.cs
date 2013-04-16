@@ -47,6 +47,7 @@ namespace uama_lab1_utan_cloud.Karl_testar
         {
             workerStatusTextBlock.Text = "Worker started - will work for 5 seconds.";
             worker.RunWorkerAsync();
+
         }
 
         void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
