@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uama-lab1-utan-cloud", "uama-lab1-utan-cloud\uama-lab1-utan-cloud.csproj", "{2D74FD49-96C1-4FA5-8185-809A8F2918D7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduledTaskAgent1", "ScheduledTaskAgent1\ScheduledTaskAgent1.csproj", "{9EDEDFB7-9264-4CEC-BDDB-07C019FFC259}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "ClassLibrary1\ClassLibrary1.csproj", "{A002D8F6-27D5-4EDD-BF40-D2227E68B634}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{9EDEDFB7-9264-4CEC-BDDB-07C019FFC259}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EDEDFB7-9264-4CEC-BDDB-07C019FFC259}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EDEDFB7-9264-4CEC-BDDB-07C019FFC259}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A002D8F6-27D5-4EDD-BF40-D2227E68B634}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A002D8F6-27D5-4EDD-BF40-D2227E68B634}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A002D8F6-27D5-4EDD-BF40-D2227E68B634}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A002D8F6-27D5-4EDD-BF40-D2227E68B634}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

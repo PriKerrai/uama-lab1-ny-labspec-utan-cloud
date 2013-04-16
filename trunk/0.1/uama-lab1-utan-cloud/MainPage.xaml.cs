@@ -28,7 +28,7 @@ namespace uama_lab1_utan_cloud
 
         private void TSPCalculationPageButton_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Karl_testar/TSPCalculation.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Karl_testar/ScheduledAgentTest.xaml", UriKind.Relative));
         }
 
         private void backgroundWorkerButton_Click(object sender, RoutedEventArgs e)
