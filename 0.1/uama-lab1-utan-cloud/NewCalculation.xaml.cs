@@ -56,9 +56,26 @@ namespace uama_lab1_utan_cloud
         {
             if (null != allCitiesListBox.SelectedItem)
             {
-                string cityName = (string)allCitiesListBox.SelectedItem;
+                if (citiesToVisitListBox.Items.Contains((string)allCitiesListBox.SelectedItem))
+                {
+                     MessageBox.Show("Visiting a city twice is not allowed.");
+                }
+                else
+                {
+                    string cityName = (string)allCitiesListBox.SelectedItem;
 
-                citiesToVisitListBox.Items.Add(cityName);
+                    citiesToVisitListBox.Items.Add(cityName);
+                }
+
+            }
+        }
+
+        // Remove the city selected.
+        private void citiesToVisitListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (null != citiesToVisitListBox.SelectedItem)
+            {
+                citiesToVisitListBox.Items.Remove(citiesToVisitListBox.SelectedItem);
             }
         }
     }
