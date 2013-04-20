@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CloudService.TSP
 {
-    class City
+    public class City
     {
         private String name;
         private int x,y;

@@ -5,13 +5,32 @@ using System.Text;
 
 namespace CloudService.TSP
 {
-    public class TSP
+    public class TSPCalculation
     {
-
         public int result = 0;
+        /*private City[] citiesToVisit;
 
-        public void Start(int NumberOfNodes)
+        public City[] CitiesToVisit
         {
+            get { return citiesToVisit; }
+            set { citiesToVisit = value; }
+        }*/
+
+        public void YoloSwag()
+        {
+            for (int i = 0; i < 1; i++)
+            {
+                // simulate calculating
+                System.Threading.Thread.Sleep(20000); // 20 sec
+            }
+
+            result = 1;
+        }
+
+        //public void Start(int NumberOfNodes)
+        public void Start(City[] citiesToVisit)
+        {
+            int NumberOfNodes = citiesToVisit.Length;
 
             int[] x = new int[NumberOfNodes];
             int[] y = new int[NumberOfNodes];
