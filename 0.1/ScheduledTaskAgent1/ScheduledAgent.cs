@@ -50,6 +50,10 @@ namespace ScheduledTaskAgent1
         protected override void OnInvoke(ScheduledTask task)
         {
             //TODO: Add code to perform your task in background
+            
+            // Loopa igenom alla calculations i Cloud och uppdatera tile samt
+            // visa toast (?) när loopen stöter på en TSPCalculation med result
+            // satt till 1
 
             // If debugging is enabled, launch the agent again in one minute.
             #if DEBUG_AGENT

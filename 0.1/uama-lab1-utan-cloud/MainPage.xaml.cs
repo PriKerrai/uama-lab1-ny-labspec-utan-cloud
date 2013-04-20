@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using CloudService.TSP;
 
 namespace uama_lab1_utan_cloud
 {
@@ -19,6 +20,7 @@ namespace uama_lab1_utan_cloud
         public MainPage()
         {
             InitializeComponent();
+            Cities.InitArrays();
         }
 
         private void logInButton_Click(object sender, RoutedEventArgs e)

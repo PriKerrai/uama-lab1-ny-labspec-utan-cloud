@@ -5,13 +5,15 @@ using System.Text;
 
 namespace CloudService.TSP
 {
-        public class Cities
+    public static class Cities
     {
+        public const int NUM_CITIES = 70;
 
-            private int[] x = new int[70];
-            private int[] y = new int[70];
-            
-            private string[] cityNames = {
+        private static int[] x = new int[NUM_CITIES];
+        private static int[] y = new int[NUM_CITIES];
+
+        #region Cities
+            private static string[] cityNames = {
             "Stockholm",
             "Goteborg",
             "Malmo",
@@ -83,35 +85,49 @@ namespace CloudService.TSP
             "Mirrodin", 
             "Ravnica", 
             "Alara" };
+            #endregion
 
-            public void initArrays()
+        public static String[] CityNames
+        {
+          get { return cityNames; }
+        }
+
+        public static void InitArrays()
+        {
+           Random random = new Random();
+
+           for (int i = 0; i < NUM_CITIES; i++)
+           {
+              x[i] = random.Next(1500);
+              y[i] = random.Next(1500);
+           }
+        }
+
+        public static City[] GetCities()
+        {
+            City[] cities = new City[NUM_CITIES];
+
+            for (int i = 0; i < NUM_CITIES; i++)
             {
-                
-
-                Random random = new Random();
-
-                for (int i = 0; i < 70; i++)
-                {
-                    x[i] = random.Next(1500);
-                    y[i] = random.Next(1500);
-
-                }
+                cities[i] = new City(cityNames[i], x[i], y[i]);
             }
 
-            public void createCities()
-            {
-                City[] Cities = new City[70];
+            return cities;
+        }
 
-                for (int i = 0; i < 70; i++)
-                {
-                    Cities[i] = new City(cityNames[i], x[i], y[i]);
-                }
+        public static City GetCityByName(string name)
+        {   
+            City[] cities = GetCities();
+
+            for (int i = 0; i < NUM_CITIES; i++)
+            {
+                if (cities[i].Name.Equals(name))
+                    return cities[i];
             }
 
-            public String[] CityNames
-            {
-                get { return cityNames; }
-            }
+            return new City("Error @ GetcityByName", -1, -1);
+        }
+
     }
 
 }

@@ -1,5 +1,6 @@
 ﻿#define DEBUG_AGENT
 
+using CloudService.Cloud;
 using CloudService.TSP;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Scheduler;
@@ -31,14 +32,12 @@ namespace uama_lab1_utan_cloud
         // usage?
         public void initCities()
         {
-            Cities cities = new Cities();
-            string[] s = cities.CityNames;
+            string[] s = Cities.CityNames;
         }
 
         private void PopulateAllCitiesListBox()
         {
-            Cities cities = new Cities();
-            string [] s = cities.CityNames;
+            string [] s = Cities.CityNames;
 
             List<string> allCities = new List<string>(s);
 
@@ -47,9 +46,17 @@ namespace uama_lab1_utan_cloud
 
         private void createCalculationButton_Click(object sender, RoutedEventArgs e)
         {
-            string[] citiesToVisit = new string[citiesToVisitListBox.Items.Count];
+            int numCities = citiesToVisitListBox.Items.Count;
+            string[] cityNames = new string[numCities];
+            City[] citiesToVisit = new City[numCities];
+            
+            citiesToVisitListBox.Items.CopyTo(cityNames, 0);
+            for (int i = 0; i < numCities; i++)
+            {
+                citiesToVisit[i] = Cities.GetCityByName(cityNames[i]);
+            }
 
-            citiesToVisitListBox.Items.CopyTo(citiesToVisit, 0);
+            Cloud.Instance.AddCalculation(citiesToVisit);
 
             StartPeriodicAgent();
         }
