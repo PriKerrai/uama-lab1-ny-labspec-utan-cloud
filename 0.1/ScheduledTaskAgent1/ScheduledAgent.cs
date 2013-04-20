@@ -1,10 +1,13 @@
-﻿using System.Windows;
+﻿#define DEBUG_AGENT
+
+using System.Windows;
 using Microsoft.Phone.Scheduler;
 using Microsoft.Phone.Shell;
+using System;
 
 namespace ScheduledTaskAgent1
 {
-    public class TSPScheduledAgent : ScheduledTaskAgent
+    public class ScheduledAgent : ScheduledTaskAgent
     {
         private static volatile bool _classInitialized;
         private string[] citiesToVisit;
@@ -12,7 +15,7 @@ namespace ScheduledTaskAgent1
         /// <remarks>
         /// ScheduledAgent constructor, initializes the UnhandledException handler
         /// </remarks>
-        public TSPScheduledAgent()
+        public ScheduledAgent()
         {
             if (!_classInitialized)
             {
@@ -46,20 +49,19 @@ namespace ScheduledTaskAgent1
         /// </remarks>
         protected override void OnInvoke(ScheduledTask task)
         {
-            // wait 9 seconds
-            //System.Threading.Thread.Sleep(9000);
-
             //TODO: Add code to perform your task in background
+
+            // If debugging is enabled, launch the agent again in one minute.
+            #if DEBUG_AGENT
+                ScheduledActionService.LaunchForTest(task.Name, TimeSpan.FromSeconds(10));
+            #endif
 
             // Launch a toast to show that the agent is running.
             // The toast will not be shown if the foreground application is running.
             ShellToast toast = new ShellToast();
-            toast.Title = "TASK IS NOW RUNNING ;D";
-            toast.Content = "Task is now running.";
-            toast.NavigationUri = new System.Uri("/Karl_testar/ScheduledAgentTest.xaml", System.UriKind.Relative);
+            toast.Title = "TSP";
+            toast.Content = "Calculation complete.";
             toast.Show();
-
-            ScheduledActionService.LaunchForTest(task.Name, System.TimeSpan.FromSeconds(3)); 
 
             NotifyComplete();
         }
