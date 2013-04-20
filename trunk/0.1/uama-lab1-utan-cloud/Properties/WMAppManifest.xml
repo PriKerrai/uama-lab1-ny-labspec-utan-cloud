@@ -21,7 +21,7 @@
     <Tasks>
       <DefaultTask Name="_default" NavigationPage="MainPage.xaml" />
       <ExtendedTask Name="BackgroundTask">
-        <BackgroundServiceAgent Specifier="ScheduledTaskAgent" Name="ScheduledTaskAgent1" Source="ScheduledTaskAgent1" Type="ScheduledTaskAgent1.ScheduledAgent" />
+        <BackgroundServiceAgent Specifier="ScheduledTaskAgent" Name="ScheduledAgent" Source="ScheduledTaskAgent1" Type="ScheduledTaskAgent1.ScheduledAgent" />
       </ExtendedTask>
     </Tasks>
     <Tokens>
