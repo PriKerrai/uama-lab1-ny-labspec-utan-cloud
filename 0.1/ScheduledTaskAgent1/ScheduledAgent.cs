@@ -1,9 +1,9 @@
 ﻿#define DEBUG_AGENT
 
-using System.Windows;
 using Microsoft.Phone.Scheduler;
 using Microsoft.Phone.Shell;
 using System;
+using System.Windows;
 
 namespace ScheduledTaskAgent1
 {
