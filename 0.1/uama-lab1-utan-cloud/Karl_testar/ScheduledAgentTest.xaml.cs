@@ -16,7 +16,7 @@ namespace uama_lab1_utan_cloud
 {
     public partial class TSPCalculation : PhoneApplicationPage
     {
-        PeriodicTask periodicTask;
+        //PeriodicTask periodicTask;
         ResourceIntensiveTask resourceIntensiveTask;
 
         public TSPCalculation()
@@ -26,15 +26,15 @@ namespace uama_lab1_utan_cloud
 
         private void StartResourceIntensiveAgent()
         {
-            //resourceIntensiveTask = new ResourceIntensiveTask("TaskName");
-            //resourceIntensiveTask.Description = "Description of task.";
-            periodicTask = new PeriodicTask("MyPeriodicTask");
-            periodicTask.Description = "Description of my periodic task";
+            resourceIntensiveTask = new ResourceIntensiveTask("TaskName");
+            resourceIntensiveTask.Description = "Resource intensive task.";
+            //periodicTask = new PeriodicTask("MyPeriodicTask");
+            //periodicTask.Description = "Periodic task";
             
             // Place the call to Add in a try block in case the user has disabled agents.
             try
             {
-                ScheduledActionService.Add(periodicTask);
+                ScheduledActionService.Add(resourceIntensiveTask);
             }
             catch (InvalidOperationException exception)
             {

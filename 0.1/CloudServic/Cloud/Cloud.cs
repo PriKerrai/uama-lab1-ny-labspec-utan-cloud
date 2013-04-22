@@ -1,5 +1,6 @@
 ﻿using CloudService.Interface;
 using CloudService.TSP;
+using CloudServic.Login;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,21 @@ namespace CloudService.Cloud
             calculations.Add(calculation);
         }
 
+        public bool Login(string id, string pw)
+        {
+            Login login = new Login();
+            User user = new User(id, pw);
+
+            return login.LoginUser(user) ? true: false;
+        }
+
+        public bool CreateUser(string id, string pw)
+        {
+            Login login = new Login();
+            User user = new User(id, pw);
+
+            return login.CreateUser(user) ? true : false;
+        }
     }
 
 }

@@ -51,6 +51,9 @@
   <ItemGroup>
     <Compile Include="Cloud\Cloud.cs" />
     <Compile Include="Interface\ICloud.cs" />
+    <Compile Include="Login\Login.cs" />
+    <Compile Include="Login\LoginDB.cs" />
+    <Compile Include="Login\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TSP\Cities.cs" />
     <Compile Include="TSP\City.cs" />
