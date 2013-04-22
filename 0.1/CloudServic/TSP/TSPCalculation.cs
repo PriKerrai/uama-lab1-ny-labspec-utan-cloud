@@ -8,6 +8,8 @@ namespace CloudService.TSP
     public class TSPCalculation
     {
         public int result = 0;
+        
+        
         /*private City[] citiesToVisit;
 
         public City[] CitiesToVisit
