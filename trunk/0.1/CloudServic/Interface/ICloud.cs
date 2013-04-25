@@ -8,8 +8,12 @@ namespace CloudService.Interface
 {
     interface ICloud
     {
-        void AddCalculation(City[] citiesToVisit);
+        void AddCalculation(string user, City[] citiesToVisit);
+
+        List<TSPCalculation> GetCalculations(string user);
+
         bool Login(string id, string pw);
+
         bool CreateUser(string id, string pw);
     }
 }
