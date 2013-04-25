@@ -28,11 +28,8 @@ namespace CloudService.TSP
         {
             this.user = user;
 
-            for (int i = 0; i < 1; i++)
-            {
-                // simulate calculation
-                System.Threading.Thread.Sleep(20000); // 20 sec
-            }
+            // simulate calculation
+            System.Threading.Thread.Sleep(10000);
 
             result = 1;
 

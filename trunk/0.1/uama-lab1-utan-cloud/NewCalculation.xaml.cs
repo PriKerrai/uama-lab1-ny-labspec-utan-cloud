@@ -58,9 +58,9 @@ namespace uama_lab1_utan_cloud
                 citiesToVisit[i] = Cities.GetCityByName(cityNames[i]);
             }
 
-            Cloud.Instance.AddCalculation(getUserId(), citiesToVisit);
+            Cloud.Instance.AddCalculation("SlimeFish", citiesToVisit);
 
-            StartPeriodicAgent();
+            //StartPeriodicAgent();
         }
 
         private string getUserId()
