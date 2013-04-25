@@ -7,31 +7,43 @@ namespace CloudService.TSP
 {
     public class TSPCalculation
     {
-        public int result = 0;
-        
-        
-        /*private City[] citiesToVisit;
+        private int result = 0;
+        private string user = "";
+        private int number = 0;
 
-        public City[] CitiesToVisit
+        public int Result
         {
-            get { return citiesToVisit; }
-            set { citiesToVisit = value; }
-        }*/
+            get { return this.result; }
+        }
+        public string User
+        {
+            get { return this.user; }
+        }
+        public int Number
+        {
+            get { return this.number; }
+        }
 
-        public void YoloSwag()
+        public void YoloSwag(string user)
         {
+            this.user = user;
+
             for (int i = 0; i < 1; i++)
             {
-                // simulate calculating
+                // simulate calculation
                 System.Threading.Thread.Sleep(20000); // 20 sec
             }
 
             result = 1;
+
+            ServiceReference1.Service1Client svc = new ServiceReference1.Service1Client();
+            svc.SendToastAsync("TSP Calc", "Calculation " + number + " has finished");
         }
 
         //public void Start(int NumberOfNodes)
-        public void Start(City[] citiesToVisit)
+        public void Start(string user, City[] citiesToVisit)
         {
+            this.user = user;
             int NumberOfNodes = citiesToVisit.Length;
 
             int[] x = new int[NumberOfNodes];

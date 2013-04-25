@@ -56,7 +56,7 @@ namespace uama_lab1_utan_cloud
                 citiesToVisit[i] = Cities.GetCityByName(cityNames[i]);
             }
 
-            Cloud.Instance.AddCalculation(citiesToVisit);
+            Cloud.Instance.AddCalculation(user, citiesToVisit);
 
             StartPeriodicAgent();
         }
