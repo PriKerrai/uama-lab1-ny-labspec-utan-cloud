@@ -13,6 +13,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using System.IO;
+using System.IO.IsolatedStorage;
 
 namespace uama_lab1_utan_cloud
 {
@@ -67,7 +69,27 @@ namespace uama_lab1_utan_cloud
 
         private void logInButton_Click(object sender, RoutedEventArgs e)
         {
+            storeUserId();
+            
             NavigationService.Navigate(new Uri("/UserPage.xaml", UriKind.Relative));
+        }
+
+        private void newUserButton_Click(object sender, RoutedEventArgs e)
+        {
+            storeUserId();
+
+            NavigationService.Navigate(new Uri("/UserPage.xaml", UriKind.Relative));
+        }
+
+        private void storeUserId()
+        {
+            IsolatedStorageFile isolatedStorageFile = IsolatedStorageFile.GetUserStoreForApplication();
+            using (StreamWriter streamWrite = new StreamWriter(new IsolatedStorageFileStream("User.txt", FileMode.Create, FileAccess.Write, isolatedStorageFile)))
+            {
+                string userId = userNameTextBox.Text;
+                streamWrite.WriteLine(userId);
+                streamWrite.Close();
+            }
         }
 
         private void ScheduledAgentTestButton_Click(object sender, RoutedEventArgs e)

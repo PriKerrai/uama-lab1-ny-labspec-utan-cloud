@@ -16,6 +16,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using System.IO.IsolatedStorage;
+using System.IO;
 
 namespace uama_lab1_utan_cloud
 {
@@ -56,9 +58,23 @@ namespace uama_lab1_utan_cloud
                 citiesToVisit[i] = Cities.GetCityByName(cityNames[i]);
             }
 
-            Cloud.Instance.AddCalculation(user, citiesToVisit);
+            Cloud.Instance.AddCalculation(getUserId(), citiesToVisit);
 
             StartPeriodicAgent();
+        }
+
+        private string getUserId()
+        {
+            IsolatedStorageFile Store = IsolatedStorageFile.GetUserStoreForApplication();
+
+            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("User.txt", FileMode.Open, Store))
+            {
+                using (StreamReader Reader = new StreamReader(stream))
+                {
+                    string fileContent = Reader.ReadToEnd();
+                    return fileContent;
+                }
+            }
         }
 
         private void StartPeriodicAgent()
