@@ -35,7 +35,7 @@ namespace CloudService.Cloud
 
             calculation.YoloSwag(user);
             //calculation.Start(user, citiesToVisit);
-            calculations.Add(calculation);
+            //calculations.Add(calculation);
         }
 
         public List<TSPCalculation> GetCalculations(string user)

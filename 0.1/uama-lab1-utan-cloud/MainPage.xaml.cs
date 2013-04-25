@@ -64,7 +64,7 @@ namespace uama_lab1_utan_cloud
 
         private void ToastReceived(NotificationEventArgs e)
         {
-            // Uppdatera lite UI här då eventuellt änna
+            NotifText.Text = string.Format("Title: " + e.Collection["wp:Text1"] + "\nMessage: " + e.Collection["wp:Text2"]);
         }
 
         private void logInButton_Click(object sender, RoutedEventArgs e)

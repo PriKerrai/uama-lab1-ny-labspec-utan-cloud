@@ -61,33 +61,33 @@ namespace ScheduledTaskAgent1
             // visa toast (?) när loopen stöter på en TSPCalculation med result
             // satt till 1
 
-            //List<TSPCalculation> calculations = Cloud.GetCalculations(user);
-            //for (int i = 0; i < calculations.Count; i++)
-            //{
-            //    if (calculations.ElementAt(i).Result == 1)
-            //    {
-            //        ShellToast toast = new ShellToast();
-            //        toast.Title = "TSP";
-            //        toast.Content = "Calculation complete.";
-            //        toast.Show();
-
-            //        // some random number
-            //        Random random = new Random();
-            //        // get application tile
-            //        ShellTile tile = ShellTile.ActiveTiles.First();
-            //        if (null != tile)
-            //        {
-            //            // creata a new data for tile
-            //            StandardTileData data = new StandardTileData();
-            //            // tile foreground data
-            //            data.Title = "Title text here";
-            //            data.BackgroundImage = new Uri("/Images/Blue.jpg", UriKind.Relative);
-            //            data.Count = random.Next(99);
-            //            // update tile
-            //            tile.Update(data);
-            //        }
-            //    }
-            //}
+            /*List<TSPCalculation> calculations = Cloud.GetCalculations(user);
+            for (int i = 0; i < calculations.Count; i++)
+            {
+                if (calculations.ElementAt(i).Result == 1)
+                {
+                    ShellToast toast = new ShellToast();
+                    toast.Title = "TSP";
+                    toast.Content = "Calculation complete.";
+                    toast.Show();
+                    
+                    // some random number
+                    Random random = new Random();
+                    // get application tile
+                    ShellTile tile = ShellTile.ActiveTiles.First();
+                    if (null != tile)
+                    {
+                        // creata a new data for tile
+                        StandardTileData data = new StandardTileData();
+                        // tile foreground data
+                        data.Title = "Title text here";
+                        data.BackgroundImage = new Uri("/Images/Blue.jpg", UriKind.Relative);
+                        data.Count = random.Next(99);
+                        // update tile
+                        tile.Update(data);
+                    }
+                }
+            }*/
 
             //#if DEBUG_AGENT
             //    ScheduledActionService.LaunchForTest(task.Name, TimeSpan.FromSeconds(30));
