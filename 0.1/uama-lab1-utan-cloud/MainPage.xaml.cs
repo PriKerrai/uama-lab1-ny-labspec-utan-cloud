@@ -1,4 +1,5 @@
-﻿using CloudService.TSP;
+﻿using CloudService.Cloud;
+using CloudService.TSP;
 using Microsoft.Phone.Controls;
 using System;
 using System.Windows;
@@ -18,26 +19,34 @@ namespace uama_lab1_utan_cloud
 
         private void logInButton_Click(object sender, RoutedEventArgs e)
         {
-            storeUserId();
+            if (Cloud.Instance.Login(userNameTextBox.Text, passwordTextBox.Text))
+            {
+                StoreUserID();
+                IsolatedStorageSettings.ApplicationSettings["userID"] = userNameTextBox.Text;
+            }
             
             NavigationService.Navigate(new Uri("/UserPage.xaml", UriKind.Relative));
         }
 
         private void newUserButton_Click(object sender, RoutedEventArgs e)
         {
-            storeUserId();
+            if (Cloud.Instance.CreateUser(userNameTextBox.Text, passwordTextBox.Text))
+            {
+                StoreUserID();
+                IsolatedStorageSettings.ApplicationSettings["userID"] = userNameTextBox.Text;
+            }
 
             NavigationService.Navigate(new Uri("/UserPage.xaml", UriKind.Relative));
         }
 
-        private void storeUserId()
+        private void StoreUserID()
         {
             IsolatedStorageFile isolatedStorageFile = IsolatedStorageFile.GetUserStoreForApplication();
-            using (StreamWriter streamWrite = new StreamWriter(new IsolatedStorageFileStream("User.txt", FileMode.Create, FileAccess.Write, isolatedStorageFile)))
+            using (StreamWriter streamWriter = new StreamWriter(new IsolatedStorageFileStream("User.txt", FileMode.Create, FileAccess.Write, isolatedStorageFile)))
             {
                 string userId = userNameTextBox.Text;
-                streamWrite.WriteLine(userId);
-                streamWrite.Close();
+                streamWriter.WriteLine(userId);
+                streamWriter.Close();
             }
         }
 

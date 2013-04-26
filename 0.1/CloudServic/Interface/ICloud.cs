@@ -1,4 +1,5 @@
 ﻿using CloudService.TSP;
+using CloudService.LoginService;
 using System.Collections.Generic;
 
 namespace CloudService.Interface
@@ -7,12 +8,20 @@ namespace CloudService.Interface
     {
         void AddCalculation(string user, City[] citiesToVisit);
 
-        List<TSPCalculation> GetCalculations(string user);
+        //List<TSPCalculation> GetCalculations(string user);
 
-        bool Login(string id, string pw);
+        void NotifyClient(string userID, int number);
 
-        bool CreateUser(string id, string pw);
+        bool Login(string userID, string password);
 
-        void NotifyClient(string user, int number);
+        bool CreateUser(string userID, string password);
+
+        void UpdateCalculation(User user);
+
+        User GetUserFromDB(string userID);
+
+        void StoreUser(User sourceData, string targetFileName);
+
+        User LoadUser(string sourceName);
     }
 }

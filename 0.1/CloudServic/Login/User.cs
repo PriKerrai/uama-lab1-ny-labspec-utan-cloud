@@ -1,15 +1,25 @@
-﻿
+﻿using CloudService.TSP;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+
 namespace CloudService.LoginService
 {
+    [DataContract] 
     public class User
     {
-        public string id { get; set; }
-        public string pw { get; set; }
+        [DataMember]
+        public List<TSPCalculation> Calculations { get; private set; }
 
-        public User(string id, string pw)
+        [DataMember]
+        public string UserID { get; private set; }
+        [DataMember]
+        public string Password { get; private set; }
+
+        public User(string userID, string password)
         {
-            this.id = id;
-            this.pw = pw;
+            UserID = userID;
+            Password = password;
+            Calculations = new List<TSPCalculation>();
         }
     }
 }

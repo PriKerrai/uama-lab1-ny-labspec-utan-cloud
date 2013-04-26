@@ -7,20 +7,20 @@ namespace CloudService.LoginService
 
         public bool CreateUser(User user)
         {
-            if (loginDB.users.Contains(user))
+            if (loginDB.Users.Contains(user))
             {
                 return false;
             }
             else
             {
-                loginDB.users.Add(user);
+                loginDB.Users.Add(user);
                 return true;
             }
         }
 
         public bool LoginUser(User user)
         {
-            return loginDB.users.Contains(user) ? true: false;
+            return loginDB.Users.Contains(user) ? true : false;
         }
     }
 }
