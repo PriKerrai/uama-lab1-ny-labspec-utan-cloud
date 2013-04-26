@@ -4,18 +4,10 @@ using CloudService.Cloud;
 using CloudService.TSP;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Scheduler;
-using ScheduledTaskAgent1;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using System.IO.IsolatedStorage;
 using System.IO;
 
@@ -59,8 +51,6 @@ namespace uama_lab1_utan_cloud
             }
 
             Cloud.Instance.AddCalculation("SlimeFish", citiesToVisit);
-
-            //StartPeriodicAgent();
         }
 
         private string getUserId()

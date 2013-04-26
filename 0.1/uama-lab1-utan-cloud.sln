@@ -2,18 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uama-lab1-utan-cloud", "uama-lab1-utan-cloud\uama-lab1-utan-cloud.csproj", "{2D74FD49-96C1-4FA5-8185-809A8F2918D7}"
-	ProjectSection(ProjectDependencies) = postProject
-		{0113E245-57EF-4A43-B5C6-2D1F5A7C854D} = {0113E245-57EF-4A43-B5C6-2D1F5A7C854D}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduledTaskAgent1", "ScheduledTaskAgent1\ScheduledTaskAgent1.csproj", "{9EDEDFB7-9264-4CEC-BDDB-07C019FFC259}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudService", "CloudServic\CloudService.csproj", "{EB8A586C-37D2-4AA6-8F2D-E3FEF2331392}"
-	ProjectSection(ProjectDependencies) = postProject
-		{0113E245-57EF-4A43-B5C6-2D1F5A7C854D} = {0113E245-57EF-4A43-B5C6-2D1F5A7C854D}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WcfService", "WcfService\WcfService.csproj", "{0113E245-57EF-4A43-B5C6-2D1F5A7C854D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +27,6 @@ Global
 		{EB8A586C-37D2-4AA6-8F2D-E3FEF2331392}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB8A586C-37D2-4AA6-8F2D-E3FEF2331392}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB8A586C-37D2-4AA6-8F2D-E3FEF2331392}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0113E245-57EF-4A43-B5C6-2D1F5A7C854D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0113E245-57EF-4A43-B5C6-2D1F5A7C854D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0113E245-57EF-4A43-B5C6-2D1F5A7C854D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0113E245-57EF-4A43-B5C6-2D1F5A7C854D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

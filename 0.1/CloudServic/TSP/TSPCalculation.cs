@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Microsoft.Phone.Shell;
 
 namespace CloudService.TSP
 {
@@ -33,8 +31,10 @@ namespace CloudService.TSP
 
             result = 1;
 
-            ServiceReference1.Service1Client svc = new ServiceReference1.Service1Client();
-            svc.SendToastAsync("TSP Calc", "Calculation " + number + " has finished");
+            ShellToast toast = new ShellToast();
+            toast.Title = "TSP";
+            toast.Content = "Calculation complete.";
+            toast.Show();
         }
 
         //public void Start(int NumberOfNodes)
