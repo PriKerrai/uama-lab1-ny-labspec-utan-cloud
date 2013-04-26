@@ -1,34 +1,23 @@
-﻿using System;
+﻿using CloudService.Cloud;
+using System;
 
 namespace CloudService.TSP
 {
     public class TSPCalculation
     {
-        private int result = 0;
-        private string user = "";
-        private int number = 0;
+        public int Result { get; private set; }
+        public string User { get; set; }
+        public int Number { get; set; }
 
-        public int Result
+        public void YoloSwag(string user, int number)
         {
-            get { return this.result; }
-        }
-        public string User
-        {
-            get { return this.user; }
-        }
-        public int Number
-        {
-            get { return this.number; }
-        }
-
-        public void YoloSwag(string user)
-        {
-            this.user = user;
+            User = user;
+            Number = number;
 
             // simulate calculation
-            System.Threading.Thread.Sleep(10000);
+            System.Threading.Thread.Sleep(5000);
 
-            result = 1;
+            Result = 1;
 
             Cloud.Cloud.Instance.NotifyClient(user, number);
         }
@@ -36,7 +25,7 @@ namespace CloudService.TSP
         //public void Start(int NumberOfNodes)
         public void Start(string user, City[] citiesToVisit)
         {
-            this.user = user;
+            User = user;
             int NumberOfNodes = citiesToVisit.Length;
 
             int[] x = new int[NumberOfNodes];
@@ -93,7 +82,7 @@ namespace CloudService.TSP
                 Console.WriteLine(cheapest_path[i]);
             }
 
-            result = Convert.ToInt16(cheapest_cost);
+            Result = Convert.ToInt16(cheapest_cost);
         }
 
         public bool next_permutation(int[] perm)

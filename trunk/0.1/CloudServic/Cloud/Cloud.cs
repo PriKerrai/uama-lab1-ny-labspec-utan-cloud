@@ -1,10 +1,13 @@
 ﻿using CloudService.Interface;
 using CloudService.LoginService;
 using CloudService.TSP;
-using System.Collections.Generic;
-using System.Linq;
-using System;
 using Microsoft.Phone.Shell;
+using System;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.IO.IsolatedStorage;
+using System.IO;
+using System.Collections.Generic;
 
 namespace CloudService.Cloud
 {
@@ -12,8 +15,6 @@ namespace CloudService.Cloud
     public class Cloud : ICloud
     {
         private static Cloud instance;
-
-        private List<TSPCalculation> calculations = new List<TSPCalculation>();
 
         public static Cloud Instance
         {
@@ -29,29 +30,18 @@ namespace CloudService.Cloud
 
         private Cloud() {}
 
-        public void AddCalculation(string user, City[] citiesToVisit)
+        public void AddCalculation(string userID, City[] citiesToVisit)
         {
             TSPCalculation calculation = new TSPCalculation();
 
-            calculation.YoloSwag(user);
+            User user = GetUserFromDB(userID);
+
+            user.Calculations.Add(calculation);
+            calculation.YoloSwag(userID, user.Calculations.Count + 1);
             //calculation.Start(user, citiesToVisit);
-            //calculations.Add(calculation);
         }
 
-        public List<TSPCalculation> GetCalculations(string user)
-        {
-            List<TSPCalculation> tmp = new List<TSPCalculation>();
-            
-            for (int i = 0; i < calculations.Count; i++)
-            {
-                if (calculations.ElementAt(i).User.Equals(user))
-                    tmp.Add(calculations.ElementAt(i));
-            }
-
-            return tmp;
-        }
-
-        public void NotifyClient(string user, int number)
+        public void NotifyClient(string userID, int number)
         {
             ShellToast toast = new ShellToast();
             toast.Title = "TSP";
@@ -75,20 +65,83 @@ namespace CloudService.Cloud
             }
         }
 
-        public bool Login(string id, string pw)
+        public bool Login(string userID, string password)
         {
             Login login = new Login();
-            User user = new User(id, pw);
+            User user = new User(userID, password);
 
             return login.LoginUser(user) ? true : false;
         }
 
-        public bool CreateUser(string id, string pw)
+        public bool CreateUser(string userID, string password)
         {
             Login login = new Login();
-            User user = new User(id, pw);
+            User user = new User(userID, password);
 
             return login.CreateUser(user) ? true : false;
+        }
+
+        public void UpdateCalculation(User user)
+        {
+            /*List<User> users = LoginDB.Instance.Users;
+            for (int i = 0; i < LoginDB.Instance.Users.Count; i++)
+            {
+                if (users.ElementAt(i).UserID.Equals(user.UserID))
+                {
+                    for (int j = 0; j < users.ElementAt(i).Calculations.Count; j++)
+                    {
+                        if (users.ElementAt(i).Calculations.ElementAt(j).Number ==
+                            user.Calculations.ElementAt(j).Number &&
+                            user.Calculations.ElementAt(j).Result == 1)
+                        {
+
+                        }
+                    }
+                }
+            }*/
+        }
+
+        public User GetUserFromDB(string userID)
+        {
+            User error = default(User);
+            for (int i = 0; i < LoginDB.Instance.Users.Count; i++)
+            {
+                if (LoginDB.Instance.Users.ElementAt(i).UserID.Equals(userID))
+                    return LoginDB.Instance.Users.ElementAt(i);
+            }
+            return error;
+        }
+
+        public void StoreUser(User sourceData, string targetFileName)
+        {
+            DataContractSerializer serializer = new DataContractSerializer(typeof(User));
+            IsolatedStorageFile isoFile = IsolatedStorageFile.GetUserStoreForApplication();
+            try
+            {
+                using (var targetFile = isoFile.CreateFile(targetFileName + ".dat"))
+                {
+                    serializer.WriteObject(targetFile, sourceData);
+                }
+            }
+            catch (Exception e)
+            {
+                isoFile.DeleteFile(targetFileName);
+            } 
+        }
+
+        public User LoadUser(string sourceName)
+        {
+            sourceName = sourceName + ".dat";
+            DataContractSerializer serializer = new DataContractSerializer(typeof(User));
+            IsolatedStorageFile isoFile = IsolatedStorageFile.GetUserStoreForApplication();
+
+            User retVal = default(User);
+            if (isoFile.FileExists(sourceName))
+                using (var sourceStream = isoFile.OpenFile(sourceName, FileMode.Open))
+                {
+                    retVal = (User)serializer.ReadObject(sourceStream);
+                }
+            return retVal; 
         }
 
     }

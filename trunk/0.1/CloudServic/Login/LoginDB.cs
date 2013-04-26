@@ -6,6 +6,13 @@ namespace CloudService.LoginService
     {
         private static LoginDB instance;
 
+        private List<User> users = new List<User>();
+
+        public List<User> Users
+        {
+            get { return this.users; } 
+        }
+
         public static LoginDB Instance
         {
             get
@@ -17,7 +24,5 @@ namespace CloudService.LoginService
                 return instance;
             }
         }
-
-        public List<User> users;
     }
 }
