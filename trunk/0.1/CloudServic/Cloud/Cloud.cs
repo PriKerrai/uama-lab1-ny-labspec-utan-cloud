@@ -1,10 +1,8 @@
 ﻿using CloudService.Interface;
 using CloudService.LoginService;
 using CloudService.TSP;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CloudService.Cloud
 {
