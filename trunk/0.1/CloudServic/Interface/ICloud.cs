@@ -12,5 +12,7 @@ namespace CloudService.Interface
         bool Login(string id, string pw);
 
         bool CreateUser(string id, string pw);
+
+        void NotifyClient(string user, int number);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Phone.Shell;
 
 namespace CloudService.TSP
 {
@@ -31,10 +30,7 @@ namespace CloudService.TSP
 
             result = 1;
 
-            ShellToast toast = new ShellToast();
-            toast.Title = "TSP";
-            toast.Content = "Calculation complete.";
-            toast.Show();
+            Cloud.Cloud.Instance.NotifyClient(user, number);
         }
 
         //public void Start(int NumberOfNodes)

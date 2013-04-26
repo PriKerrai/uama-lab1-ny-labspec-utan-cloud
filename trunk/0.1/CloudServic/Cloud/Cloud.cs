@@ -3,6 +3,8 @@ using CloudService.LoginService;
 using CloudService.TSP;
 using System.Collections.Generic;
 using System.Linq;
+using System;
+using Microsoft.Phone.Shell;
 
 namespace CloudService.Cloud
 {
@@ -47,6 +49,30 @@ namespace CloudService.Cloud
             }
 
             return tmp;
+        }
+
+        public void NotifyClient(string user, int number)
+        {
+            ShellToast toast = new ShellToast();
+            toast.Title = "TSP";
+            toast.Content = "Calculation no. " + number + " complete!";
+            toast.Show();
+
+            // some random number
+            Random random = new Random();
+            // get application tile
+            ShellTile tile = ShellTile.ActiveTiles.First();
+            if (null != tile)
+            {
+                // creata a new data for tile
+                StandardTileData data = new StandardTileData();
+                // tile foreground data
+                data.Title = "Title text here";
+                data.BackgroundImage = new Uri("/Images/Blue.jpg", UriKind.Relative);
+                data.Count = random.Next(99);
+                // update tile
+                tile.Update(data);
+            }
         }
 
         public bool Login(string id, string pw)
