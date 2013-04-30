@@ -6,9 +6,9 @@ namespace CloudService.Interface
 {
     interface ICloud
     {
-        void AddCalculation(string user, City[] citiesToVisit);
+        void AddCalculation(string userID, City[] citiesToVisit);
 
-        //List<TSPCalculation> GetCalculations(string user);
+        void MoveCalculationToFinished(string userID, int number);
 
         void NotifyClient(string userID, int number);
 
@@ -16,12 +16,16 @@ namespace CloudService.Interface
 
         bool CreateUser(string userID, string password);
 
-        void UpdateCalculation(User user);
-
         User GetUserFromDB(string userID);
 
         void StoreUser(User sourceData, string targetFileName);
 
         User LoadUser(string sourceName);
+
+        void UpdateUser(User user);
+
+        void StoreUserDB(UserDB sourceData);
+
+        void LoadUserDB();
     }
 }

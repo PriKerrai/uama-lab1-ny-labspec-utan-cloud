@@ -15,7 +15,6 @@ namespace uama_lab1_utan_cloud
 {
     public partial class NewCalculation : PhoneApplicationPage
     {
-        PeriodicTask periodicTask;
 
         public NewCalculation()
         {
@@ -59,7 +58,8 @@ namespace uama_lab1_utan_cloud
             {
                 IsolatedStorageSettings.ApplicationSettings.Add("userID", "");
             }
-            Cloud.Instance.AddCalculation("SlimeFish", citiesToVisit);
+            Cloud.Instance.AddCalculation("SlimeFish", citiesToVisit); // DEBUG
+            //Cloud.Instance.AddCalculation(userID, citiesToVisit);
         }
 
         private void allCitiesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

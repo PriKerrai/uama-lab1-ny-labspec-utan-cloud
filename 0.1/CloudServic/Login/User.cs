@@ -8,7 +8,9 @@ namespace CloudService.LoginService
     public class User
     {
         [DataMember]
-        public List<TSPCalculation> Calculations { get; private set; }
+        public List<TSPCalculation> ActiveCalculations { get; private set; }
+        [DataMember]
+        public List<TSPCalculation> FinishedCalculations { get; set; }
 
         [DataMember]
         public string UserID { get; private set; }
@@ -19,7 +21,8 @@ namespace CloudService.LoginService
         {
             UserID = userID;
             Password = password;
-            Calculations = new List<TSPCalculation>();
+            ActiveCalculations = new List<TSPCalculation>();
+            FinishedCalculations = new List<TSPCalculation>();
         }
     }
 }

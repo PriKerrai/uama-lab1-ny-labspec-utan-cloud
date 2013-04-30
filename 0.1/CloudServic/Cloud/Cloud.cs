@@ -8,6 +8,9 @@ using System.Runtime.Serialization;
 using System.IO.IsolatedStorage;
 using System.IO;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Xml.Serialization;
+using System.Xml.Linq;
 
 namespace CloudService.Cloud
 {
@@ -15,6 +18,18 @@ namespace CloudService.Cloud
     public class Cloud : ICloud
     {
         private static Cloud instance;
+
+        private IsolatedStorageFile isoFile; 
+        public IsolatedStorageFile IsoFile
+        {
+            get
+            {
+                if (isoFile == null)
+                    isoFile = System.IO.IsolatedStorage.
+                                IsolatedStorageFile.GetUserStoreForApplication();
+                return isoFile;
+            }
+        }
 
         public static Cloud Instance
         {
@@ -36,9 +51,24 @@ namespace CloudService.Cloud
 
             User user = GetUserFromDB(userID);
 
-            user.Calculations.Add(calculation);
-            calculation.YoloSwag(userID, user.Calculations.Count + 1);
+            user.ActiveCalculations.Add(calculation);
+            calculation.YoloSwag(userID, (user.ActiveCalculations.Count + user.FinishedCalculations.Count));
             //calculation.Start(user, citiesToVisit);
+        }
+
+        public void MoveCalculationToFinished(string userID, int number)
+        {
+            User user = GetUserFromDB(userID);
+
+            for (int i = 0; i < user.ActiveCalculations.Count; i++)
+            {
+                if (user.ActiveCalculations.ElementAt(i).Number == number)
+                {
+                    user.FinishedCalculations.Add(user.ActiveCalculations.ElementAt(i));
+                    user.ActiveCalculations.RemoveAt(i);
+                    break;
+                }
+            }
         }
 
         public void NotifyClient(string userID, int number)
@@ -81,33 +111,13 @@ namespace CloudService.Cloud
             return login.CreateUser(user) ? true : false;
         }
 
-        public void UpdateCalculation(User user)
-        {
-            /*List<User> users = LoginDB.Instance.Users;
-            for (int i = 0; i < LoginDB.Instance.Users.Count; i++)
-            {
-                if (users.ElementAt(i).UserID.Equals(user.UserID))
-                {
-                    for (int j = 0; j < users.ElementAt(i).Calculations.Count; j++)
-                    {
-                        if (users.ElementAt(i).Calculations.ElementAt(j).Number ==
-                            user.Calculations.ElementAt(j).Number &&
-                            user.Calculations.ElementAt(j).Result == 1)
-                        {
-
-                        }
-                    }
-                }
-            }*/
-        }
-
         public User GetUserFromDB(string userID)
         {
             User error = default(User);
-            for (int i = 0; i < LoginDB.Instance.Users.Count; i++)
+            for (int i = 0; i < UserDB.Instance.Users.Count; i++)
             {
-                if (LoginDB.Instance.Users.ElementAt(i).UserID.Equals(userID))
-                    return LoginDB.Instance.Users.ElementAt(i);
+                if (UserDB.Instance.Users.ElementAt(i).UserID.Equals(userID))
+                    return UserDB.Instance.Users.ElementAt(i);
             }
             return error;
         }
@@ -115,33 +125,94 @@ namespace CloudService.Cloud
         public void StoreUser(User sourceData, string targetFileName)
         {
             DataContractSerializer serializer = new DataContractSerializer(typeof(User));
-            IsolatedStorageFile isoFile = IsolatedStorageFile.GetUserStoreForApplication();
             try
             {
-                using (var targetFile = isoFile.CreateFile(targetFileName + ".dat"))
+                using (var targetFile = IsoFile.CreateFile(targetFileName + ".dat"))
                 {
                     serializer.WriteObject(targetFile, sourceData);
                 }
             }
             catch (Exception e)
             {
-                isoFile.DeleteFile(targetFileName);
-            } 
+                Debug.WriteLine("\nStoreUser failed:\n"+e.StackTrace);
+                IsoFile.DeleteFile(targetFileName + ".dat");
+            }
         }
 
         public User LoadUser(string sourceName)
         {
             sourceName = sourceName + ".dat";
             DataContractSerializer serializer = new DataContractSerializer(typeof(User));
-            IsolatedStorageFile isoFile = IsolatedStorageFile.GetUserStoreForApplication();
 
-            User retVal = default(User);
-            if (isoFile.FileExists(sourceName))
-                using (var sourceStream = isoFile.OpenFile(sourceName, FileMode.Open))
+            User user = default(User);
+            try
+            {
+                if (IsoFile.FileExists(sourceName))
                 {
-                    retVal = (User)serializer.ReadObject(sourceStream);
+                    using (var sourceStream = IsoFile.OpenFile(sourceName, FileMode.Open))
+                    {
+                        user = (User)serializer.ReadObject(sourceStream);
+                    }
                 }
-            return retVal; 
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("\nLoadUser failed:\n"+e.StackTrace);
+            }
+            return user;
+        }
+
+        public void UpdateUser(User user)
+        {
+            for (int i = 0; i < UserDB.Instance.Users.Count; i++)
+            {
+                if (UserDB.Instance.Users.ElementAt(i).UserID.Equals(user.UserID))
+                {
+                    if (UserDB.Instance.Users.ElementAt(i).FinishedCalculations.Count > 0)
+                    {
+                        for (int j = 0; j < UserDB.Instance.Users.ElementAt(i).FinishedCalculations.Count; j++)
+                        {
+                            user.FinishedCalculations.Add(UserDB.Instance.Users.ElementAt(i).FinishedCalculations.ElementAt(j));
+                        }
+                        UserDB.Instance.Users.ElementAt(i).FinishedCalculations = user.FinishedCalculations;
+                    }
+                }
+            }
+        }
+
+        public void StoreUserDB(UserDB sourceData)
+        {
+            DataContractSerializer serializer = new DataContractSerializer(typeof(UserDB));
+            try
+            {
+                using (var targetFile = IsoFile.CreateFile("UserDB.dat"))
+                {
+                    serializer.WriteObject(targetFile, sourceData);
+                }
+            }
+            catch (Exception e)
+            {
+                IsoFile.DeleteFile("UserDB.dat");
+            }
+        }
+
+        public void LoadUserDB()
+        {
+            DataContractSerializer serializer = new DataContractSerializer(typeof(UserDB));
+
+            UserDB userDB = default(UserDB);
+            if (IsoFile.FileExists("UserDB.dat"))
+            {
+                using (var sourceStream = IsoFile.OpenFile("UserDB.dat", FileMode.Open))
+                {
+                    userDB = (UserDB)serializer.ReadObject(sourceStream);
+                }
+                UserDB.LoadUserDB(userDB);
+            }
+            else
+            {
+                Debug.WriteLine("File do not exist.");
+            }
         }
 
     }
