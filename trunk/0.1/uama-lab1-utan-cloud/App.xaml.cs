@@ -1,10 +1,14 @@
-﻿using CloudService.Cloud;
+﻿#define DEBUG_AGENT
+
+using CloudService.Cloud;
+using CloudService.LoginService;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Navigation;
+using System.Diagnostics;
 
 namespace uama_lab1_utan_cloud
 {
@@ -77,22 +81,14 @@ namespace uama_lab1_utan_cloud
         // This code will not execute when the application is deactivated
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
-            string userID = (string)IsolatedStorageSettings.ApplicationSettings["userID"];
-            Cloud.Instance.StoreUser(Cloud.Instance.GetUserFromDB(userID), userID);
-        }
-
-        private string GetUserID()
-        {
-            IsolatedStorageFile Store = IsolatedStorageFile.GetUserStoreForApplication();
-
-            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("User.txt", FileMode.Open, Store))
+            Debug.WriteLine("NIGGGUUUUUH");
+            string userID = "";
+            if (IsolatedStorageSettings.ApplicationSettings["userID"] != null)
             {
-                using (StreamReader Reader = new StreamReader(stream))
-                {
-                    string fileContent = Reader.ReadToEnd();
-                    return fileContent;
-                }
+                userID = (string)IsolatedStorageSettings.ApplicationSettings["userID"];
+                Cloud.Instance.StoreUser(Cloud.Instance.GetUserFromDB(userID), userID);
             }
+            Cloud.Instance.StoreUserDB(UserDB.Instance);
         }
 
         // Code to execute if a navigation fails

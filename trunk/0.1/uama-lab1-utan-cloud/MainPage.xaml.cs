@@ -6,11 +6,13 @@ using System.Windows;
 using System.IO;
 using System.IO.IsolatedStorage;
 using CloudService.LoginService;
+using System.Diagnostics;
 
 namespace uama_lab1_utan_cloud
 {
     public partial class MainPage : PhoneApplicationPage
     {
+
         public MainPage()
         {
             InitializeComponent();
@@ -66,7 +68,7 @@ namespace uama_lab1_utan_cloud
                 {
                     MessageBox.Show("User name is already in use, please choose another.");
                 }
-            }
+            } 
         }
 
         private User getUserFromForm()
@@ -86,30 +88,47 @@ namespace uama_lab1_utan_cloud
             }
         }
 
+        private void CalculationTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            Cloud.Instance.LoadUserDB();
+            // <DEBUG---
+            Cloud.Instance.CreateUser("SlimeFish", "abcdef");
+            Cloud.Instance.StoreUser(Cloud.Instance.GetUserFromDB("SlimeFish"), "SlimeFish");
+            IsolatedStorageSettings.ApplicationSettings["userID"] = "SlimeFish";
+            using (StreamWriter streamWriter = new StreamWriter(new IsolatedStorageFileStream("User.txt", FileMode.Create, FileAccess.Write, Cloud.Instance.IsoFile)))
+            {
+                streamWriter.WriteLine(IsolatedStorageSettings.ApplicationSettings["userID"]);
+                streamWriter.Close();
+            }
+            User asdf = Cloud.Instance.LoadUser(GetUserID());
+            Debug.WriteLine("User Object: " + asdf);
+            Debug.WriteLine("User Object ID: " + asdf.UserID);
+            // ---DEBUG>
+            Cloud.Instance.UpdateUser(Cloud.Instance.LoadUser(GetUserID()));
+            Cloud.Instance.StoreUserDB(CloudService.LoginService.UserDB.Instance); // Ta bort efter att den lyckats spara databasen en gång!
+            NavigationService.Navigate(new Uri("/NewCalculation.xaml", UriKind.Relative));
+        }
+
         private void StoreUserID()
         {
-            IsolatedStorageFile isolatedStorageFile = IsolatedStorageFile.GetUserStoreForApplication();
-            using (StreamWriter streamWriter = new StreamWriter(new IsolatedStorageFileStream("User.txt", FileMode.Create, FileAccess.Write, isolatedStorageFile)))
+            using (StreamWriter streamWriter = new StreamWriter(new IsolatedStorageFileStream("User.txt", FileMode.Create, FileAccess.Write, Cloud.Instance.IsoFile)))
             {
-                string userId = userNameTextBox.Text;
-                streamWriter.WriteLine(userId);
+                string userID = userNameTextBox.Text;
+                streamWriter.WriteLine(userID);
                 streamWriter.Close();
             }
         }
 
-        private void ScheduledAgentTestButton_Click(object sender, RoutedEventArgs e)
+        private string GetUserID()
         {
-            NavigationService.Navigate(new Uri("/NewCalculation.xaml", UriKind.Relative));
-        }
-
-        private void TSPCalculationPageButton_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/Karl_testar/ScheduledAgentTest.xaml", UriKind.Relative));
-        }
-
-        private void backgroundWorkerButton_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/Karl_testar/BackgroundWorkerTest.xaml", UriKind.Relative));
+            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("User.txt", FileMode.Open, Cloud.Instance.IsoFile))
+            {
+                using (StreamReader Reader = new StreamReader(stream))
+                {
+                    string fileContent = Reader.ReadLine();
+                    return fileContent;
+                }
+            }
         }
     }
 }

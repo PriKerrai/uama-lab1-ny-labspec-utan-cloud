@@ -3,24 +3,23 @@ namespace CloudService.LoginService
 {
     public class Login
     {
-        LoginDB loginDB = LoginDB.Instance;
 
         public bool CreateUser(User user)
         {
-            if (loginDB.Users.Contains(user))
+            if (UserDB.Instance.Users.Contains(user))
             {
                 return false;
             }
             else
             {
-                loginDB.Users.Add(user);
+                UserDB.Instance.Users.Add(user);
                 return true;
             }
         }
 
         public bool LoginUser(User user)
         {
-            return loginDB.Users.Contains(user) ? true : false;
+            return UserDB.Instance.Users.Contains(user) ? true : false;
         }
     }
 }

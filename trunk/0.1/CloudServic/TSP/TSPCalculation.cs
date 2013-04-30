@@ -1,17 +1,22 @@
 ﻿using CloudService.Cloud;
 using System;
+using System.Runtime.Serialization;
 
 namespace CloudService.TSP
 {
+    [DataContract]
     public class TSPCalculation
     {
+        [DataMember]
         public int Result { get; private set; }
-        public string User { get; set; }
-        public int Number { get; set; }
+        [DataMember]
+        public string UserID { get; private set; }
+        [DataMember]
+        public int Number { get; private set; }
 
-        public void YoloSwag(string user, int number)
+        public void YoloSwag(string userID, int number)
         {
-            User = user;
+            UserID = userID;
             Number = number;
 
             // simulate calculation
@@ -19,13 +24,14 @@ namespace CloudService.TSP
 
             Result = 1;
 
-            Cloud.Cloud.Instance.NotifyClient(user, number);
+            Cloud.Cloud.Instance.MoveCalculationToFinished(userID, number);
+            Cloud.Cloud.Instance.NotifyClient(userID, number);
         }
 
         //public void Start(int NumberOfNodes)
-        public void Start(string user, City[] citiesToVisit)
+        public void Start(string userID, City[] citiesToVisit)
         {
-            User = user;
+            UserID = userID;
             int NumberOfNodes = citiesToVisit.Length;
 
             int[] x = new int[NumberOfNodes];
