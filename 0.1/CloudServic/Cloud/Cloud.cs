@@ -4,13 +4,9 @@ using CloudService.TSP;
 using Microsoft.Phone.Shell;
 using System;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.IO.IsolatedStorage;
 using System.IO;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Xml.Serialization;
-using System.Xml.Linq;
 
 namespace CloudService.Cloud
 {
@@ -25,8 +21,7 @@ namespace CloudService.Cloud
             get
             {
                 if (isoFile == null)
-                    isoFile = System.IO.IsolatedStorage.
-                                IsolatedStorageFile.GetUserStoreForApplication();
+                    isoFile = IsolatedStorageFile.GetUserStoreForApplication();
                 return isoFile;
             }
         }
@@ -122,47 +117,48 @@ namespace CloudService.Cloud
             return error;
         }
 
-        public void StoreUser(User sourceData, string targetFileName)
+        public void StoreUser(User user)
         {
-            DataContractSerializer serializer = new DataContractSerializer(typeof(User));
-            try
+            using (StreamWriter streamWriter = new StreamWriter(new IsolatedStorageFileStream("UserDB.txt", FileMode.Create, FileAccess.Write, IsoFile)))
             {
-                using (var targetFile = IsoFile.CreateFile(targetFileName + ".dat"))
-                {
-                    serializer.WriteObject(targetFile, sourceData);
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("\nStoreUser failed:\n"+e.StackTrace);
-                IsoFile.DeleteFile(targetFileName + ".dat");
+                streamWriter.WriteLine(user.UserID+":"+user.Password);
+                streamWriter.Close();
             }
         }
 
-        public User LoadUser(string sourceName)
+        public void LoadUserDB()
         {
-            sourceName = sourceName + ".dat";
-            DataContractSerializer serializer = new DataContractSerializer(typeof(User));
+            string line = "";
 
-            User user = default(User);
+            if (!IsoFile.FileExists("UserDB.txt"))
+            {
+                IsoFile.CreateFile("UserDB.txt");
+            }
             try
             {
-                if (IsoFile.FileExists(sourceName))
+                using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("UserDB.txt", FileMode.Open, IsoFile))
                 {
-                    using (var sourceStream = IsoFile.OpenFile(sourceName, FileMode.Open))
+                    using (StreamReader reader = new StreamReader(stream))
                     {
-                        user = (User)serializer.ReadObject(sourceStream);
+                        char[] delimiters = new char[] { ':' };
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            string[] parts = line.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                            //Debug.WriteLine("User: \"" + parts[0] + "\" : \"" + parts[1] + "\"");
+                            if (parts[0] != null && parts[0].Length > 0
+                                && parts[1] != null && parts[1].Length > 0)
+                                UserDB.Instance.Users.Add(new User(parts[0], parts[1]));
+                        }
                     }
                 }
             }
             catch (Exception e)
             {
-                Debug.WriteLine("\nLoadUser failed:\n"+e.StackTrace);
+                Debug.WriteLine("\nLoadUserDB Failed:\n"+e.StackTrace+"\n");
             }
-            return user;
         }
 
-        public void UpdateUser(User user)
+        /*public void UpdateUser(User user)
         {
             for (int i = 0; i < UserDB.Instance.Users.Count; i++)
             {
@@ -213,7 +209,7 @@ namespace CloudService.Cloud
             {
                 Debug.WriteLine("File do not exist.");
             }
-        }
+        }*/
 
     }
 

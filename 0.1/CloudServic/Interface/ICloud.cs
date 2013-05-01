@@ -18,14 +18,14 @@ namespace CloudService.Interface
 
         User GetUserFromDB(string userID);
 
-        void StoreUser(User sourceData, string targetFileName);
-
-        User LoadUser(string sourceName);
-
-        void UpdateUser(User user);
-
-        void StoreUserDB(UserDB sourceData);
+        void StoreUser(User user);
 
         void LoadUserDB();
+
+        //void UpdateUser(User user);
+
+        //void StoreUserDB(UserDB sourceData);
+
+        //void LoadUserDB();
     }
 }

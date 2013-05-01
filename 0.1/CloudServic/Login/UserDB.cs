@@ -3,12 +3,10 @@ using System.Runtime.Serialization;
 
 namespace CloudService.LoginService
 {
-    [DataContract] 
     public class UserDB
     {
         private static UserDB instance;
 
-        [DataMember]
         private List<User> users = new List<User>();
 
         public List<User> Users

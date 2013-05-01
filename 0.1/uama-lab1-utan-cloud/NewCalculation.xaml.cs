@@ -22,12 +22,6 @@ namespace uama_lab1_utan_cloud
             PopulateAllCitiesListBox();
         }
 
-        // usage?
-        public void initCities()
-        {
-            string[] s = Cities.CityNames;
-        }
-
         private void PopulateAllCitiesListBox()
         {
             string [] s = Cities.CityNames;

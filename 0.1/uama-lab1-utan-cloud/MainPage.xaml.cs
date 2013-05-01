@@ -16,6 +16,7 @@ namespace uama_lab1_utan_cloud
         public MainPage()
         {
             InitializeComponent();
+            Cloud.Instance.LoadUserDB();
             Cities.InitArrays();
         }
 
@@ -55,12 +56,12 @@ namespace uama_lab1_utan_cloud
             }
             else
             {
-                bool userCreated = Cloud.Instance.CreateUser(user.UserID, user.Password);
-
-                if (userCreated)
+                if (Cloud.Instance.CreateUser(user.UserID, user.Password))
                 {
                     StoreUserID();
                     IsolatedStorageSettings.ApplicationSettings["userID"] = user.UserID;
+
+                    Cloud.Instance.StoreUser(user);
 
                     NavigationService.Navigate(new Uri("/UserPage.xaml", UriKind.Relative));
                 }
@@ -68,7 +69,7 @@ namespace uama_lab1_utan_cloud
                 {
                     MessageBox.Show("User name is already in use, please choose another.");
                 }
-            } 
+            }
         }
 
         private User getUserFromForm()
@@ -90,28 +91,17 @@ namespace uama_lab1_utan_cloud
 
         private void CalculationTestButton_Click(object sender, RoutedEventArgs e)
         {
-            Cloud.Instance.LoadUserDB();
-            // <DEBUG---
-            Cloud.Instance.CreateUser("SlimeFish", "abcdef");
-            Cloud.Instance.StoreUser(Cloud.Instance.GetUserFromDB("SlimeFish"), "SlimeFish");
-            IsolatedStorageSettings.ApplicationSettings["userID"] = "SlimeFish";
-            using (StreamWriter streamWriter = new StreamWriter(new IsolatedStorageFileStream("User.txt", FileMode.Create, FileAccess.Write, Cloud.Instance.IsoFile)))
+            if (Cloud.Instance.GetUserFromDB("SlimeFish") == null) // <DEBUG ---
             {
-                streamWriter.WriteLine(IsolatedStorageSettings.ApplicationSettings["userID"]);
-                streamWriter.Close();
-            }
-            User asdf = Cloud.Instance.LoadUser(GetUserID());
-            Debug.WriteLine("User Object: " + asdf);
-            Debug.WriteLine("User Object ID: " + asdf.UserID);
-            // ---DEBUG>
-            Cloud.Instance.UpdateUser(Cloud.Instance.LoadUser(GetUserID()));
-            Cloud.Instance.StoreUserDB(CloudService.LoginService.UserDB.Instance); // Ta bort efter att den lyckats spara databasen en gång!
+                Cloud.Instance.CreateUser("SlimeFish", "abcdef");
+                Cloud.Instance.StoreUser(new User("SlimeFish", "abcdef"));
+            } // --- DEBUG>
             NavigationService.Navigate(new Uri("/NewCalculation.xaml", UriKind.Relative));
         }
 
         private void StoreUserID()
         {
-            using (StreamWriter streamWriter = new StreamWriter(new IsolatedStorageFileStream("User.txt", FileMode.Create, FileAccess.Write, Cloud.Instance.IsoFile)))
+            using (StreamWriter streamWriter = new StreamWriter(new IsolatedStorageFileStream("UserID.txt", FileMode.Create, FileAccess.Write, Cloud.Instance.IsoFile)))
             {
                 string userID = userNameTextBox.Text;
                 streamWriter.WriteLine(userID);
@@ -121,11 +111,11 @@ namespace uama_lab1_utan_cloud
 
         private string GetUserID()
         {
-            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("User.txt", FileMode.Open, Cloud.Instance.IsoFile))
+            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("UserID.txt", FileMode.Open, Cloud.Instance.IsoFile))
             {
-                using (StreamReader Reader = new StreamReader(stream))
+                using (StreamReader reader = new StreamReader(stream))
                 {
-                    string fileContent = Reader.ReadLine();
+                    string fileContent = reader.ReadLine();
                     return fileContent;
                 }
             }
