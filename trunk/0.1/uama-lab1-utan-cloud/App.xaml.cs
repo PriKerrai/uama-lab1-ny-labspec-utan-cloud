@@ -81,14 +81,6 @@ namespace uama_lab1_utan_cloud
         // This code will not execute when the application is deactivated
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
-            Debug.WriteLine("NIGGGUUUUUH");
-            string userID = "";
-            if (IsolatedStorageSettings.ApplicationSettings["userID"] != null)
-            {
-                userID = (string)IsolatedStorageSettings.ApplicationSettings["userID"];
-                Cloud.Instance.StoreUser(Cloud.Instance.GetUserFromDB(userID), userID);
-            }
-            Cloud.Instance.StoreUserDB(UserDB.Instance);
         }
 
         // Code to execute if a navigation fails
