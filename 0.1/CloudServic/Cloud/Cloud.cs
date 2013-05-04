@@ -7,6 +7,7 @@ using System.Linq;
 using System.IO.IsolatedStorage;
 using System.IO;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace CloudService.Cloud
 {
@@ -42,13 +43,14 @@ namespace CloudService.Cloud
 
         public void AddCalculation(string userID, City[] citiesToVisit)
         {
-            TSPCalculation calculation = new TSPCalculation();
+            GetUserFromDB(userID).NumCalculations++;
 
-            User user = GetUserFromDB(userID);
+            TSPCalculation calculation = new TSPCalculation(userID, GetUserFromDB(userID).NumCalculations);
 
-            user.ActiveCalculations.Add(calculation);
-            calculation.YoloSwag(userID, (user.ActiveCalculations.Count + user.FinishedCalculations.Count));
+            GetUserFromDB(userID).ActiveCalculations.Add(calculation);
+            calculation.YoloSwag();
             //calculation.Start(user, citiesToVisit);
+            StoreUser(GetUserFromDB(userID));
         }
 
         public void MoveCalculationToFinished(string userID, int number)
@@ -73,8 +75,6 @@ namespace CloudService.Cloud
             toast.Content = "Calculation no. " + number + " complete!";
             toast.Show();
 
-            // some random number
-            Random random = new Random();
             // get application tile
             ShellTile tile = ShellTile.ActiveTiles.First();
             if (null != tile)
@@ -84,7 +84,7 @@ namespace CloudService.Cloud
                 // tile foreground data
                 data.Title = "Title text here";
                 data.BackgroundImage = new Uri("/Images/Blue.jpg", UriKind.Relative);
-                data.Count = random.Next(99);
+                data.Count = GetUserFromDB(userID).FinishedCalculations.Count;
                 // update tile
                 tile.Update(data);
             }
@@ -108,22 +108,58 @@ namespace CloudService.Cloud
 
         public User GetUserFromDB(string userID)
         {
-            User error = default(User);
             for (int i = 0; i < UserDB.Instance.Users.Count; i++)
             {
                 if (UserDB.Instance.Users.ElementAt(i).UserID.Equals(userID))
                     return UserDB.Instance.Users.ElementAt(i);
             }
-            return error;
+            return null;
         }
 
         public void StoreUser(User user)
         {
-            using (StreamWriter streamWriter = new StreamWriter(new IsolatedStorageFileStream("UserDB.txt", FileMode.Create, FileAccess.Write, IsoFile)))
+            string[] lines = GetUsers();
+
+            char[] delimiters = new char[] { ':' };
+            for (int i = 0; i < lines.Length; i++)
             {
-                streamWriter.WriteLine(user.UserID+":"+user.Password);
-                streamWriter.Close();
+                string[] parts = lines[i].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                if (parts[0].Equals(user.UserID))
+                {
+                    parts[2] = Convert.ToString(user.NumCalculations);
+                    lines[i] = parts[0] + ":" + parts[1] + ":" + parts[2];
+                }
             }
+            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("UserDB.txt", FileMode.Create, FileAccess.Write, IsoFile))
+            {
+                using (StreamWriter writer = new StreamWriter(stream))
+                {
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        writer.WriteLine(lines[i]);
+                    }
+                }
+            }
+        }
+
+        private string[] GetUsers()
+        {
+            string line = "";
+            string[] lines = new string[0];
+
+            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("UserDB.txt", FileMode.Open, FileAccess.Read, IsoFile))
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    List<string> linesList = new List<string>();
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        linesList.Add(line);
+                    }
+                    lines = linesList.ToArray();
+                }
+            }
+            return lines;
         }
 
         public void LoadUserDB()
@@ -144,10 +180,10 @@ namespace CloudService.Cloud
                         while ((line = reader.ReadLine()) != null)
                         {
                             string[] parts = line.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-                            //Debug.WriteLine("User: \"" + parts[0] + "\" : \"" + parts[1] + "\"");
+                            Debug.WriteLine("User: \"" + parts[0] + "\" : \"" + parts[1] + "\" : \"" + parts[2]);
                             if (parts[0] != null && parts[0].Length > 0
                                 && parts[1] != null && parts[1].Length > 0)
-                                UserDB.Instance.Users.Add(new User(parts[0], parts[1]));
+                                UserDB.Instance.Users.Add(new User(parts[0], parts[1], Convert.ToInt32(parts[2])));
                         }
                     }
                 }
@@ -158,7 +194,22 @@ namespace CloudService.Cloud
             }
         }
 
-        /*public void UpdateUser(User user)
+        public void StoreFinishedCalculation(TSPCalculation calculation)
+        {
+            // File name format: Username-Calc#.txt
+            string fileName = calculation.UserID + "-Calc" + calculation.Number + ".txt";
+
+            if (!IsoFile.FileExists(fileName))
+            {
+                using (StreamWriter writer = new StreamWriter(new IsolatedStorageFileStream(fileName, FileMode.Create, FileAccess.Write, IsoFile)))
+                {
+                    writer.WriteLine("This is calculation number "+calculation.Number+", initiated by user "+calculation.UserID);
+                    writer.Close();
+                }
+            }
+        }
+
+        /*public void UpdateUser(string userID)
         {
             for (int i = 0; i < UserDB.Instance.Users.Count; i++)
             {
@@ -173,41 +224,6 @@ namespace CloudService.Cloud
                         UserDB.Instance.Users.ElementAt(i).FinishedCalculations = user.FinishedCalculations;
                     }
                 }
-            }
-        }
-
-        public void StoreUserDB(UserDB sourceData)
-        {
-            DataContractSerializer serializer = new DataContractSerializer(typeof(UserDB));
-            try
-            {
-                using (var targetFile = IsoFile.CreateFile("UserDB.dat"))
-                {
-                    serializer.WriteObject(targetFile, sourceData);
-                }
-            }
-            catch (Exception e)
-            {
-                IsoFile.DeleteFile("UserDB.dat");
-            }
-        }
-
-        public void LoadUserDB()
-        {
-            DataContractSerializer serializer = new DataContractSerializer(typeof(UserDB));
-
-            UserDB userDB = default(UserDB);
-            if (IsoFile.FileExists("UserDB.dat"))
-            {
-                using (var sourceStream = IsoFile.OpenFile("UserDB.dat", FileMode.Open))
-                {
-                    userDB = (UserDB)serializer.ReadObject(sourceStream);
-                }
-                UserDB.LoadUserDB(userDB);
-            }
-            else
-            {
-                Debug.WriteLine("File do not exist.");
             }
         }*/
 

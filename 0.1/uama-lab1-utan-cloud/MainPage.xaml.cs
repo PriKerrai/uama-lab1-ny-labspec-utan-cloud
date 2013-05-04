@@ -30,9 +30,7 @@ namespace uama_lab1_utan_cloud
             }
             else
             {
-                bool validUser = Cloud.Instance.Login(user.UserID, user.Password);
-
-                if (validUser)
+                if (Cloud.Instance.Login(user.UserID, user.Password))
                 {
                     StoreUserID();
                     IsolatedStorageSettings.ApplicationSettings["userID"] = user.UserID;
@@ -91,11 +89,13 @@ namespace uama_lab1_utan_cloud
 
         private void CalculationTestButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Cloud.Instance.GetUserFromDB("SlimeFish") == null) // <DEBUG ---
+            // <DEBUG ---
+            if (Cloud.Instance.GetUserFromDB("SlimeFish") == null)
             {
                 Cloud.Instance.CreateUser("SlimeFish", "abcdef");
                 Cloud.Instance.StoreUser(new User("SlimeFish", "abcdef"));
-            } // --- DEBUG>
+            }
+            // --- DEBUG>
             NavigationService.Navigate(new Uri("/NewCalculation.xaml", UriKind.Relative));
         }
 
