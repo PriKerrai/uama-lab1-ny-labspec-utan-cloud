@@ -16,7 +16,7 @@ namespace uama_lab1_utan_cloud
         public MainPage()
         {
             InitializeComponent();
-            Cloud.Instance.LoadUserDB();
+            UserDB.Instance.LoadUserDB();
             Cities.InitArrays();
         }
 
@@ -57,8 +57,6 @@ namespace uama_lab1_utan_cloud
                 {
                     StoreUserID(user.UserID);
 
-                    Cloud.Instance.StoreUser(user);
-
                     NavigationService.Navigate(new Uri("/UserPage.xaml", UriKind.Relative));
                 }
                 else
@@ -88,11 +86,10 @@ namespace uama_lab1_utan_cloud
         // DEBUG FUNCTION
         private void CalculationTestButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Cloud.Instance.GetUserFromDB("SlimeFish") == null)
+            if (CloudService.LoginService.UserDB.Instance.GetUser("SlimeFish") == null)
             {
                 Debug.WriteLine("User did not exist, creating user ...");
                 Cloud.Instance.CreateUser("SlimeFish", "abcdef");
-                Cloud.Instance.StoreUser(new User("SlimeFish", "abcdef"));
                 StoreUserID("SlimeFish");
             }
             NavigationService.Navigate(new Uri("/NewCalculation.xaml", UriKind.Relative));
