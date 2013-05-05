@@ -48,6 +48,7 @@ namespace CloudService.Cloud
             TSPCalculation calculation = new TSPCalculation(userID, GetUserFromDB(userID).NumCalculations);
 
             GetUserFromDB(userID).ActiveCalculations.Add(calculation);
+            Debug.WriteLine("Count: " + GetUserFromDB(userID).ActiveCalculations.Count);
             calculation.YoloSwag();
             //calculation.Start(user, citiesToVisit);
             StoreUser(GetUserFromDB(userID));
@@ -55,14 +56,12 @@ namespace CloudService.Cloud
 
         public void MoveCalculationToFinished(string userID, int number)
         {
-            User user = GetUserFromDB(userID);
-
-            for (int i = 0; i < user.ActiveCalculations.Count; i++)
+            for (int i = 0; i < GetUserFromDB(userID).ActiveCalculations.Count; i++)
             {
-                if (user.ActiveCalculations.ElementAt(i).Number == number)
+                if (GetUserFromDB(userID).ActiveCalculations.ElementAt(i).Number == number)
                 {
-                    user.FinishedCalculations.Add(user.ActiveCalculations.ElementAt(i));
-                    user.ActiveCalculations.RemoveAt(i);
+                    GetUserFromDB(userID).FinishedCalculations.Add(GetUserFromDB(userID).ActiveCalculations.ElementAt(i));
+                    GetUserFromDB(userID).ActiveCalculations.RemoveAt(i);
                     break;
                 }
             }
@@ -121,13 +120,19 @@ namespace CloudService.Cloud
             string[] lines = GetUsers();
 
             char[] delimiters = new char[] { ':' };
-            for (int i = 0; i < lines.Length; i++)
+            Debug.WriteLine("Contains user? " + ContainsUser(lines, user.UserID) + ".");
+            if (ContainsUser(lines, user.UserID))
             {
-                string[] parts = lines[i].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-                if (parts[0].Equals(user.UserID))
+                // Update already existing user
+                Debug.WriteLine("Updating already existing user ...");
+                for (int i = 0; i < lines.Length; i++)
                 {
-                    parts[2] = Convert.ToString(user.NumCalculations);
-                    lines[i] = parts[0] + ":" + parts[1] + ":" + parts[2];
+                    string[] parts = lines[i].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                    if (parts[0].Equals(user.UserID))
+                    {
+                        parts[2] = Convert.ToString(user.NumCalculations);
+                        lines[i] = parts[0] + ":" + parts[1] + ":" + parts[2];
+                    }
                 }
             }
             using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("UserDB.txt", FileMode.Create, FileAccess.Write, IsoFile))
@@ -137,6 +142,11 @@ namespace CloudService.Cloud
                     for (int i = 0; i < lines.Length; i++)
                     {
                         writer.WriteLine(lines[i]);
+                    }
+                    if (!ContainsUser(lines, user.UserID))
+                    {
+                        Debug.WriteLine("Adding user to DB ...");
+                        writer.WriteLine(user.UserID + ":" + user.Password + ":" + user.NumCalculations);
                     }
                 }
             }
@@ -162,35 +172,54 @@ namespace CloudService.Cloud
             return lines;
         }
 
+        private bool ContainsUser(string[] users, string userID)
+        {
+            char[] delimiters = new char[] { ':' };
+            for (int i = 0; i < users.Length; i++)
+            {
+                string[] parts = users[i].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                if (parts[0].Equals(userID))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void LoadUserDB()
         {
             string line = "";
 
+            // Remove the "!" to reset UserDB
             if (!IsoFile.FileExists("UserDB.txt"))
             {
+                Debug.WriteLine("UserDB.txt does not exist, creating file ...");
                 IsoFile.CreateFile("UserDB.txt");
             }
-            try
+            else
             {
-                using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("UserDB.txt", FileMode.Open, IsoFile))
+                try
                 {
-                    using (StreamReader reader = new StreamReader(stream))
+                    using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("UserDB.txt", FileMode.Open, FileAccess.Read, IsoFile))
                     {
-                        char[] delimiters = new char[] { ':' };
-                        while ((line = reader.ReadLine()) != null)
+                        using (StreamReader reader = new StreamReader(stream))
                         {
-                            string[] parts = line.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-                            Debug.WriteLine("User: \"" + parts[0] + "\" : \"" + parts[1] + "\" : \"" + parts[2]);
-                            if (parts[0] != null && parts[0].Length > 0
-                                && parts[1] != null && parts[1].Length > 0)
-                                UserDB.Instance.Users.Add(new User(parts[0], parts[1], Convert.ToInt32(parts[2])));
+                            char[] delimiters = new char[] { ':' };
+                            while ((line = reader.ReadLine()) != null)
+                            {
+                                string[] parts = line.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                                Debug.WriteLine("User: \"" + parts[0] + "\" : \"" + parts[1] + "\" : \"" + parts[2] + "\"");
+                                if (parts[0] != null && parts[0].Length > 0
+                                    && parts[1] != null && parts[1].Length > 0)
+                                    UserDB.Instance.Users.Add(new User(parts[0], parts[1], Convert.ToInt32(parts[2])));
+                            }
                         }
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("\nLoadUserDB Failed:\n"+e.StackTrace+"\n");
+                catch (Exception e)
+                {
+                    Debug.WriteLine("\nLoadUserDB Failed:\n" + e.StackTrace + "\n");
+                }
             }
         }
 
@@ -198,34 +227,22 @@ namespace CloudService.Cloud
         {
             // File name format: Username-Calc#.txt
             string fileName = calculation.UserID + "-Calc" + calculation.Number + ".txt";
+            Debug.WriteLine("Calculation file: "+calculation.UserID + "-Calc" + calculation.Number + ".txt");
 
-            if (!IsoFile.FileExists(fileName))
+            Debug.WriteLine("Calculation file did not exist, creating file ...");
+            using (StreamWriter writer = new StreamWriter(new IsolatedStorageFileStream(fileName, FileMode.Create, FileAccess.Write, IsoFile)))
             {
-                using (StreamWriter writer = new StreamWriter(new IsolatedStorageFileStream(fileName, FileMode.Create, FileAccess.Write, IsoFile)))
-                {
-                    writer.WriteLine("This is calculation number "+calculation.Number+", initiated by user "+calculation.UserID);
-                    writer.Close();
-                }
+                Debug.WriteLine("Writing to calculation file ...");
+                writer.WriteLine("This is calculation number "+calculation.Number+", initiated by user "+calculation.UserID);
+                writer.Close();
+            }
+            using (StreamReader reader = new StreamReader(new IsolatedStorageFileStream(fileName, FileMode.Open, FileAccess.Read, IsoFile)))
+            {
+                Debug.WriteLine("Reading from calculation file ...");
+                Debug.WriteLine("Calculation info: " + reader.ReadLine());
+                reader.Close();
             }
         }
-
-        /*public void UpdateUser(string userID)
-        {
-            for (int i = 0; i < UserDB.Instance.Users.Count; i++)
-            {
-                if (UserDB.Instance.Users.ElementAt(i).UserID.Equals(user.UserID))
-                {
-                    if (UserDB.Instance.Users.ElementAt(i).FinishedCalculations.Count > 0)
-                    {
-                        for (int j = 0; j < UserDB.Instance.Users.ElementAt(i).FinishedCalculations.Count; j++)
-                        {
-                            user.FinishedCalculations.Add(UserDB.Instance.Users.ElementAt(i).FinishedCalculations.ElementAt(j));
-                        }
-                        UserDB.Instance.Users.ElementAt(i).FinishedCalculations = user.FinishedCalculations;
-                    }
-                }
-            }
-        }*/
 
     }
 

@@ -34,17 +34,6 @@ namespace uama_lab1_utan_cloud
 
         private void createCalculationButton_Click(object sender, RoutedEventArgs e)
         {
-            //try
-            //{
-            //    userID = (string)IsolatedStorageSettings.ApplicationSettings["userID"];
-            //}
-            //catch
-            //{
-            //    IsolatedStorageSettings.ApplicationSettings.Add("userID", "");
-            //}
-            //Cloud.Instance.AddCalculation("SlimeFish", citiesToVisit); // DEBUG
-            //Cloud.Instance.AddCalculation(userID, citiesToVisit);
-
             // create a background worker for adding the calculation to the cloud
 
             BackgroundWorker bw = new BackgroundWorker();
@@ -60,10 +49,10 @@ namespace uama_lab1_utan_cloud
         {
             BackgroundWorker worker = sender as BackgroundWorker;
 
-            Cloud.Instance.AddCalculation(getUserId(), getCitiesToVisit());
+            Cloud.Instance.AddCalculation(GetUserID(), GetCitiesToVisit());
         }
 
-        private City[] getCitiesToVisit()
+        private City[] GetCitiesToVisit()
         {
             int numCities = citiesToVisitListBox.Items.Count;
             string[] cityNames = new string[numCities];
@@ -78,16 +67,17 @@ namespace uama_lab1_utan_cloud
             return citiesToVisit;
         }
 
-        private string getUserId()
+        private string GetUserID()
         {
-            IsolatedStorageFile Store = IsolatedStorageFile.GetUserStoreForApplication();
+            IsolatedStorageFile ISOFile = IsolatedStorageFile.GetUserStoreForApplication();
 
-            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("User.txt", FileMode.Open, Store))
+            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("UserID.txt", FileMode.Open, FileAccess.Read, ISOFile))
             {
-                using (StreamReader Reader = new StreamReader(stream))
+                using (StreamReader reader = new StreamReader(stream))
                 {
-                    string fileContent = Reader.ReadToEnd();
-                    return fileContent;
+                    string userID = reader.ReadLine();
+                    reader.Close();
+                    return userID;
                 }
             }
         }
