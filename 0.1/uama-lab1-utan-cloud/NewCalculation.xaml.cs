@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.IO.IsolatedStorage;
 using System.IO;
+using System.ComponentModel;
 
 namespace uama_lab1_utan_cloud
 {
@@ -33,27 +34,62 @@ namespace uama_lab1_utan_cloud
 
         private void createCalculationButton_Click(object sender, RoutedEventArgs e)
         {
-            string userID = "";
+            //try
+            //{
+            //    userID = (string)IsolatedStorageSettings.ApplicationSettings["userID"];
+            //}
+            //catch
+            //{
+            //    IsolatedStorageSettings.ApplicationSettings.Add("userID", "");
+            //}
+            //Cloud.Instance.AddCalculation("SlimeFish", citiesToVisit); // DEBUG
+            //Cloud.Instance.AddCalculation(userID, citiesToVisit);
+
+            // create a background worker for adding the calculation to the cloud
+
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.WorkerSupportsCancellation = true;
+            bw.WorkerReportsProgress = true;
+            bw.DoWork += new DoWorkEventHandler(bw_DoWork);
+            //bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
+            //bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted);
+            bw.RunWorkerAsync();
+        }
+
+        private void bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            Cloud.Instance.AddCalculation(getUserId(), getCitiesToVisit());
+        }
+
+        private City[] getCitiesToVisit()
+        {
             int numCities = citiesToVisitListBox.Items.Count;
             string[] cityNames = new string[numCities];
             City[] citiesToVisit = new City[numCities];
-            
+
             citiesToVisitListBox.Items.CopyTo(cityNames, 0);
             for (int i = 0; i < numCities; i++)
             {
                 citiesToVisit[i] = Cities.GetCityByName(cityNames[i]);
             }
 
-            try
+            return citiesToVisit;
+        }
+
+        private string getUserId()
+        {
+            IsolatedStorageFile Store = IsolatedStorageFile.GetUserStoreForApplication();
+
+            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("User.txt", FileMode.Open, Store))
             {
-                userID = (string)IsolatedStorageSettings.ApplicationSettings["userID"];
+                using (StreamReader Reader = new StreamReader(stream))
+                {
+                    string fileContent = Reader.ReadToEnd();
+                    return fileContent;
+                }
             }
-            catch
-            {
-                IsolatedStorageSettings.ApplicationSettings.Add("userID", "");
-            }
-            Cloud.Instance.AddCalculation("SlimeFish", citiesToVisit); // DEBUG
-            //Cloud.Instance.AddCalculation(userID, citiesToVisit);
         }
 
         private void allCitiesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -74,7 +110,7 @@ namespace uama_lab1_utan_cloud
             }
         }
 
-        // Remove the city selected.
+        // Remove the selected city from listbox.
         private void citiesToVisitListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (null != citiesToVisitListBox.SelectedItem)
