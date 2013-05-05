@@ -8,7 +8,7 @@ namespace CloudService.Interface
     {
         void AddCalculation(string userID, City[] citiesToVisit);
 
-        //void MoveCalculationToFinished(string userID, int number);
+        void MoveCalculationToFinished(string userID, int number);
 
         void NotifyClient(string userID, int number);
 

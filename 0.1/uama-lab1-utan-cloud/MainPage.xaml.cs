@@ -32,8 +32,7 @@ namespace uama_lab1_utan_cloud
             {
                 if (Cloud.Instance.Login(user.UserID, user.Password))
                 {
-                    StoreUserID();
-                    IsolatedStorageSettings.ApplicationSettings["userID"] = user.UserID;
+                    StoreUserID(user.UserID);
 
                     NavigationService.Navigate(new Uri("/UserPage.xaml", UriKind.Relative));
                 }
@@ -56,8 +55,7 @@ namespace uama_lab1_utan_cloud
             {
                 if (Cloud.Instance.CreateUser(user.UserID, user.Password))
                 {
-                    StoreUserID();
-                    IsolatedStorageSettings.ApplicationSettings["userID"] = user.UserID;
+                    StoreUserID(user.UserID);
 
                     Cloud.Instance.StoreUser(user);
 
@@ -87,36 +85,29 @@ namespace uama_lab1_utan_cloud
             }
         }
 
+        // DEBUG FUNCTION
         private void CalculationTestButton_Click(object sender, RoutedEventArgs e)
         {
-            // <DEBUG ---
             if (Cloud.Instance.GetUserFromDB("SlimeFish") == null)
             {
+                Debug.WriteLine("User did not exist, creating user ...");
                 Cloud.Instance.CreateUser("SlimeFish", "abcdef");
                 Cloud.Instance.StoreUser(new User("SlimeFish", "abcdef"));
+                StoreUserID("SlimeFish");
             }
-            // --- DEBUG>
             NavigationService.Navigate(new Uri("/NewCalculation.xaml", UriKind.Relative));
         }
 
-        private void StoreUserID()
+        private void StoreUserID(string userID)
         {
-            using (StreamWriter streamWriter = new StreamWriter(new IsolatedStorageFileStream("UserID.txt", FileMode.Create, FileAccess.Write, Cloud.Instance.IsoFile)))
-            {
-                string userID = userNameTextBox.Text;
-                streamWriter.WriteLine(userID);
-                streamWriter.Close();
-            }
-        }
+            IsolatedStorageFile ISOFile = IsolatedStorageFile.GetUserStoreForApplication();
 
-        private string GetUserID()
-        {
-            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("UserID.txt", FileMode.Open, Cloud.Instance.IsoFile))
+            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("UserID.txt", FileMode.Create, FileAccess.Write, ISOFile))
             {
-                using (StreamReader reader = new StreamReader(stream))
+                using (StreamWriter writer = new StreamWriter(stream))
                 {
-                    string fileContent = reader.ReadLine();
-                    return fileContent;
+                    writer.WriteLine(userID);
+                    writer.Close();
                 }
             }
         }
