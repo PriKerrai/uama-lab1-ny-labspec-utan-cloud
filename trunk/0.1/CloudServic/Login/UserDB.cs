@@ -36,40 +36,37 @@ namespace CloudService.LoginService
         {
             string line = "";
 
-            // Remove the "!" to reset UserDB
-            if (!Cloud.Cloud.Instance.IsoFile.FileExists("UserDB.txt"))
+            // DEBUG Reset DB code ...
+            /*if (Cloud.Cloud.Instance.IsoFile.FileExists("UserDB.txt"))
             {
-                Debug.WriteLine("UserDB.txt does not exist, creating file ...");
-                Cloud.Cloud.Instance.IsoFile.CreateFile("UserDB.txt");
-            }
-            else
+                Debug.WriteLine("UserDB.txt exists, deleting file ...");
+                Cloud.Cloud.Instance.IsoFile.DeleteFile("UserDB.txt");
+            }*/
+            try
             {
-                try
-                {
-                    using (IsolatedStorageFileStream stream =
-                        new IsolatedStorageFileStream(
-                            "UserDB.txt", FileMode.Open, FileAccess.Read, Cloud.Cloud.Instance.IsoFile
-                        )
+                using (IsolatedStorageFileStream stream =
+                    new IsolatedStorageFileStream(
+                        "UserDB.txt", FileMode.OpenOrCreate, FileAccess.Read, Cloud.Cloud.Instance.IsoFile
                     )
+                )
+                {
+                    using (StreamReader reader = new StreamReader(stream))
                     {
-                        using (StreamReader reader = new StreamReader(stream))
+                        char[] delimiters = new char[] { ':' };
+                        while ((line = reader.ReadLine()) != null)
                         {
-                            char[] delimiters = new char[] { ':' };
-                            while ((line = reader.ReadLine()) != null)
-                            {
-                                string[] parts = line.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-                                Debug.WriteLine("User: \"" + parts[0] + "\" : \"" + parts[1] + "\" : \"" + parts[2] + "\"");
-                                if (parts[0] != null && parts[0].Length > 0
-                                    && parts[1] != null && parts[1].Length > 0)
-                                    UserDB.Instance.Users.Add(new User(parts[0], parts[1], Convert.ToInt32(parts[2])));
-                            }
+                            string[] parts = line.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                            Debug.WriteLine("User: \"" + parts[0] + "\" : \"" + parts[1] + "\" : \"" + parts[2] + "\"");
+                            if (parts[0] != null && parts[0].Length > 0
+                                && parts[1] != null && parts[1].Length > 0)
+                                UserDB.Instance.Users.Add(new User(parts[0], parts[1], Convert.ToInt32(parts[2])));
                         }
                     }
                 }
-                catch (Exception e)
-                {
-                    Debug.WriteLine("\nLoadUserDB Failed:\n" + e.StackTrace + "\n");
-                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("\nLoadUserDB Failed:\n" + e.StackTrace + "\n");
             }
         }
 
