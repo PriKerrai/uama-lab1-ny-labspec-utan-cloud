@@ -100,9 +100,9 @@ namespace uama_lab1_utan_cloud
 
         private void StoreUserID(string userID)
         {
-            IsolatedStorageFile ISOFile = IsolatedStorageFile.GetUserStoreForApplication();
+            IsolatedStorageFile isoFile = Cloud.Instance.IsoFile;
 
-            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("UserID.txt", FileMode.Create, FileAccess.Write, ISOFile))
+            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("UserID.txt", FileMode.Create, FileAccess.Write, isoFile))
             {
                 using (StreamWriter writer = new StreamWriter(stream))
                 {
