@@ -3,6 +3,7 @@ using System;
 using System.Windows;
 using System.IO.IsolatedStorage;
 using System.IO;
+using CloudService.Cloud;
 
 namespace uama_lab1_utan_cloud
 {
@@ -22,19 +23,20 @@ namespace uama_lab1_utan_cloud
 
         private void setUserNameTextBlock()
         {
-            userNameTextBlock.Text = getUserId();
+            userNameTextBlock.Text = GetUserID();
         }
 
-        private string getUserId()
+        private string GetUserID()
         {
-            IsolatedStorageFile Store = IsolatedStorageFile.GetUserStoreForApplication();
+            IsolatedStorageFile isoFile = Cloud.Instance.IsoFile;
 
-            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("User.txt", FileMode.Open, Store))
+            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("UserID.txt", FileMode.Open, FileAccess.Read, isoFile))
             {
-                using (StreamReader Reader = new StreamReader(stream))
+                using (StreamReader reader = new StreamReader(stream))
                 {
-                    string fileContent = Reader.ReadToEnd();
-                    return fileContent;
+                    string userID = reader.ReadToEnd();
+                    reader.Close();
+                    return userID;
                 }
             }
         }
