@@ -14,13 +14,7 @@ namespace CloudService.Interface
 
         bool Login(string userID, string password);
 
-        User GetUserFromDB(string userID);
-
         bool CreateUser(string userID, string password);
-
-        void StoreUser(User user);
-
-        void LoadUserDB();
 
         void StoreFinishedCalculation(TSPCalculation calculation);
     }

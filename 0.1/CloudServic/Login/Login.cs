@@ -6,20 +6,23 @@ namespace CloudService.LoginService
 
         public bool CreateUser(User user)
         {
-            if (UserDB.Instance.Users.Contains(user))
+            UserDB userDB = UserDB.Instance;
+            if (userDB.ContainsUser(userDB.GetUsers(), user.UserID))
             {
                 return false;
             }
             else
             {
                 UserDB.Instance.Users.Add(user);
+                UserDB.Instance.StoreUser(user);
                 return true;
             }
         }
 
         public bool LoginUser(User user)
         {
-            return UserDB.Instance.Users.Contains(user) ? true : false;
+            UserDB userDB = UserDB.Instance;
+            return userDB.ContainsUser(userDB.GetUsers(), user.UserID) ? true : false;
         }
     }
 }
