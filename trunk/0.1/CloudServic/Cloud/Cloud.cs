@@ -58,6 +58,7 @@ namespace CloudService.Cloud
             StoreFinishedCalculation(calculation);
             UserDB.Instance.StoreUser(UserDB.Instance.GetUser(userID));
             NotifyClient(userID, calculation.Number);
+            UserDB.Instance.GetUser(userID).FinishedCalculations.Clear();
         }
 
         private void MoveCalculationToFinished(string userID, int number)
@@ -87,7 +88,7 @@ namespace CloudService.Cloud
                 // creata a new data for tile
                 StandardTileData data = new StandardTileData();
                 // tile foreground data
-                data.Title = "Title text here";
+                data.Title = "TSP Calculation";
                 data.BackgroundImage = new Uri("/Images/Blue.jpg", UriKind.Relative);
                 data.Count = UserDB.Instance.GetUser(userID).FinishedCalculations.Count;
                 // update tile
