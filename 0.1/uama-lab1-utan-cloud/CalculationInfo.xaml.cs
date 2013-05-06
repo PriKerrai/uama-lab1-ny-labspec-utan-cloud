@@ -37,12 +37,12 @@ namespace uama_lab1_utan_cloud
                     reader.ReadLine();
 
                     string line = "";
-                    while (!(line = reader.ReadLine()).Contains("Result"))
+                    while (!(line = reader.ReadLine()).Contains("Shortest path"))
                     {
                         cities.Add(line);
                     }
                     reader.Close();
-                    resultTextBlock.Text = line;
+                    resultTextBlock.Text = line + " miles";
                     inputCitiesListBox.ItemsSource = cities;
                 }
             }

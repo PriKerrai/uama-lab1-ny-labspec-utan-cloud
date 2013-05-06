@@ -13,8 +13,6 @@ namespace uama_lab1_utan_cloud
 {
     public partial class UserPage : PhoneApplicationPage
     {
-        private IsolatedStorageFile isoFile;
-
         public UserPage()
         {
             InitializeComponent();
