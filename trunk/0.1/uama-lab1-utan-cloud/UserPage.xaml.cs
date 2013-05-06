@@ -1,15 +1,12 @@
 ﻿using CloudService.Cloud;
-using CloudService.TSP;
+using CloudService.LoginService;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Scheduler;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Controls;
-using System.IO.IsolatedStorage;
-using System.IO;
-using System.ComponentModel;
-using CloudService.LoginService;
 
 
 namespace uama_lab1_utan_cloud
@@ -21,7 +18,7 @@ namespace uama_lab1_utan_cloud
         public UserPage()
         {
             InitializeComponent();
-
+            ListAllCalculations(GetUserID());
             setUserNameTextBlock();
         }
 
@@ -32,49 +29,80 @@ namespace uama_lab1_utan_cloud
 
         private void setUserNameTextBlock()
         {
-            userNameTextBlock.Text = GetUserID();
+            userNameTitleTextBlock.Text = GetUserID();
+        }
+
+        private void calculationsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (calculationsListBox.SelectedItem != null)
+            {
+                string[] parts = ((string)calculationsListBox.SelectedItem).
+                                 Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+                StoreCalculationNumber(parts[1]);
+                NavigationService.Navigate(new Uri("/CalculationInfo.xaml", UriKind.Relative));
+            }
+        }
+
+        public void ListAllCalculations(string userID)
+        {
+            string fileName = userID + "-Calc";
+            int i = 1;
+            List<string> list = new List<string>();
+
+            while (i <= UserDB.Instance.GetUser(userID).NumCalculations)
+            {
+                if (Cloud.Instance.IsoFile.FileExists(fileName + i + ".txt"))
+                {
+                    using (StreamReader reader = 
+                        new StreamReader(
+                            new IsolatedStorageFileStream(
+                                fileName + i + ".txt", FileMode.Open, FileAccess.Read, Cloud.Instance.IsoFile
+                            )
+                        )
+                    )
+                    {
+                        list.Add(reader.ReadLine());
+                        reader.Close();
+                    }
+                }
+                i++;
+            }
+            if (list.Count > 0)
+                calculationsListBox.ItemsSource = list;
         }
 
         private string GetUserID()
         {
-            IsolatedStorageFile isoFile = Cloud.Instance.IsoFile;
-
-            using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream("UserID.txt", FileMode.Open, FileAccess.Read, isoFile))
+            using (IsolatedStorageFileStream stream = 
+                new IsolatedStorageFileStream(
+                    "UserID.txt", FileMode.Open, FileAccess.Read, Cloud.Instance.IsoFile
+                )
+            )
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    string userID = reader.ReadToEnd();
+                    string userID = reader.ReadLine();
                     reader.Close();
                     return userID;
                 }
             }
         }
 
-        public void listAllFinishedCalculations(User user)
+        private void StoreCalculationNumber(string number)
         {
-            string fileName = GetUserID() + "-Calc";
-            int i = 0;
-            List<String> list = new List<String>();
-
-            using (StreamReader reader = new StreamReader(new IsolatedStorageFileStream(fileName, FileMode.Open, FileAccess.Read, isoFile)))
+            using (IsolatedStorageFileStream stream =
+                new IsolatedStorageFileStream(
+                    "CalculationID.txt", FileMode.Create, FileAccess.Write, Cloud.Instance.IsoFile
+                )
+            )
             {
-                while (i < user.NumCalculations)
+                using (StreamWriter writer = new StreamWriter(stream))
                 {
-                    if (Cloud.Instance.IsoFile.FileExists(fileName + i + ".txt"))
-                    {
-
-                        list.Add(reader.ReadToEnd());
-
-                    }
-
-                    i++;
+                    writer.WriteLine(number);
+                    writer.Close();
                 }
-                calculationsListBox.Items.Add(list);
             }
-
         }
-
-
 
     }
 }

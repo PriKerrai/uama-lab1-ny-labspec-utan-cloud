@@ -70,7 +70,7 @@ namespace uama_lab1_utan_cloud
 
         private void allCitiesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (null != allCitiesListBox.SelectedItem)
+            if (allCitiesListBox.SelectedItem != null)
             {
                 if (citiesToVisitListBox.Items.Contains((string)allCitiesListBox.SelectedItem))
                 {
