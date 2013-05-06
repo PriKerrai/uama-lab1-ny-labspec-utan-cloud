@@ -7,6 +7,8 @@ using System.Linq;
 using System.IO.IsolatedStorage;
 using System.IO;
 using System.Diagnostics;
+using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace CloudService.Cloud
 {
@@ -45,11 +47,11 @@ namespace CloudService.Cloud
             UserDB.Instance.GetUser(userID).NumCalculations++;
 
             TSPCalculation calculation = new TSPCalculation(userID, UserDB.Instance.GetUser(userID).NumCalculations);
-
             UserDB.Instance.GetUser(userID).ActiveCalculations.Add(calculation);
-            Debug.WriteLine("Count: " + UserDB.Instance.GetUser(userID).ActiveCalculations.Count);
+
             calculation.YoloSwag();
             //calculation.Start(user, citiesToVisit);
+
             UserDB.Instance.StoreUser(UserDB.Instance.GetUser(userID));
         }
 
