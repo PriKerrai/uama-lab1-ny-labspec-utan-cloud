@@ -16,6 +16,7 @@ namespace uama_lab1_utan_cloud
 {
     public partial class NewCalculation : PhoneApplicationPage
     {
+        City[] citiesToVisit;
 
         public NewCalculation()
         {
@@ -34,6 +35,7 @@ namespace uama_lab1_utan_cloud
 
         private void createCalculationButton_Click(object sender, RoutedEventArgs e)
         {
+            citiesToVisit = GetCitiesToVisit();
             // create a background worker for adding the calculation to the cloud
 
             BackgroundWorker bw = new BackgroundWorker();
@@ -49,7 +51,7 @@ namespace uama_lab1_utan_cloud
         {
             BackgroundWorker worker = sender as BackgroundWorker;
 
-            Cloud.Instance.AddCalculation(GetUserID(), GetCitiesToVisit());
+            Cloud.Instance.AddCalculation(GetUserID(), citiesToVisit);
         }
 
         private City[] GetCitiesToVisit()
