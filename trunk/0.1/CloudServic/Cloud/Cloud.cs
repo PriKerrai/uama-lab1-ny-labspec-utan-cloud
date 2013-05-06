@@ -52,8 +52,8 @@ namespace CloudService.Cloud
 
             StoreOngoingCalculation(calculation);
 
-            calculation.YoloSwag();
-            //calculation.Start(user, citiesToVisit);
+            //calculation.YoloSwag();
+            //calculation.Start(citiesToVisit, userID);
 
             MoveCalculationToFinished(userID, calculation.Number);
             StoreFinishedCalculation(calculation);

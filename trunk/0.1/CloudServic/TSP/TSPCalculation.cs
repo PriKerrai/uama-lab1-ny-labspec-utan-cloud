@@ -17,15 +17,16 @@ namespace CloudService.TSP
             UserID = userID;
             Number = number;
             CitiesToVisit = citiesToVisit;
-        }
+            Start();
+         }
 
-        public void YoloSwag()
-        {
-            // simulate calculation
-            System.Threading.Thread.Sleep(5000);
+        //public void YoloSwag()
+        //{
+        //    // simulate calculation
+        //    System.Threading.Thread.Sleep(5000);
 
-            Result = 1;
-        }
+        //    Result = 1;
+        //}
 
         //public void Start(int NumberOfNodes)
         public void Start()
@@ -40,8 +41,8 @@ namespace CloudService.TSP
             for (int i = 0; i < NumberOfNodes; i++)
             {
                 nodes[i] = i;
-                x[i] = random.Next(1500);
-                y[i] = random.Next(1500);
+                x[i] = CitiesToVisit[i].X;
+                y[i] = CitiesToVisit[i].Y;
 
             }
 
