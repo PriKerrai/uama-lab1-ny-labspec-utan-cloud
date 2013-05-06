@@ -17,18 +17,8 @@ namespace CloudService.TSP
             UserID = userID;
             Number = number;
             CitiesToVisit = citiesToVisit;
-            Start();
-         }
+        }
 
-        //public void YoloSwag()
-        //{
-        //    // simulate calculation
-        //    System.Threading.Thread.Sleep(5000);
-
-        //    Result = 1;
-        //}
-
-        //public void Start(int NumberOfNodes)
         public void Start()
         {
             int NumberOfNodes = CitiesToVisit.Length;

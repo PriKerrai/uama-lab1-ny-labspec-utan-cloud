@@ -118,7 +118,6 @@ namespace CloudService.Cloud
 
             using (StreamWriter writer = new StreamWriter(new IsolatedStorageFileStream(fileName, FileMode.Create, FileAccess.Write, IsoFile)))
             {
-                Debug.WriteLine("Writing to calculation file ...");
                 writer.WriteLine("Calculation " + calculation.Number);
                 writer.WriteLine("Parameters:");
                 for (int i = 0; i < calculation.CitiesToVisit.Length; i++)
@@ -131,7 +130,6 @@ namespace CloudService.Cloud
             {
                 string line = "";
 
-                Debug.WriteLine("Reading from ongoing calculation file ...");
                 while ((line = reader.ReadLine()) != null)
                 {
                     Debug.WriteLine(line);
@@ -154,7 +152,6 @@ namespace CloudService.Cloud
             {
                 string line = "";
 
-                Debug.WriteLine("Reading from finished calculation file ...");
                 while ((line = reader.ReadLine()) != null)
                 {
                     Debug.WriteLine(line);

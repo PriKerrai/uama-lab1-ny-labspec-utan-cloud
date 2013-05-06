@@ -83,18 +83,6 @@ namespace uama_lab1_utan_cloud
             }
         }
 
-        // DEBUG FUNCTION
-        private void CalculationTestButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (CloudService.LoginService.UserDB.Instance.GetUser("SlimeFish") == null)
-            {
-                Debug.WriteLine("User did not exist, creating user ...");
-                Cloud.Instance.CreateUser("SlimeFish", "abcdef");
-                StoreUserID("SlimeFish");
-            }
-            NavigationService.Navigate(new Uri("/NewCalculation.xaml", UriKind.Relative));
-        }
-
         private void StoreUserID(string userID)
         {
             IsolatedStorageFile isoFile = Cloud.Instance.IsoFile;
