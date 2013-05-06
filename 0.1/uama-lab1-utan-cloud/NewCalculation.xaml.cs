@@ -35,23 +35,7 @@ namespace uama_lab1_utan_cloud
 
         private void createCalculationButton_Click(object sender, RoutedEventArgs e)
         {
-            citiesToVisit = GetCitiesToVisit();
-            // create a background worker for adding the calculation to the cloud
-
-            BackgroundWorker bw = new BackgroundWorker();
-            bw.WorkerSupportsCancellation = true;
-            bw.WorkerReportsProgress = true;
-            bw.DoWork += new DoWorkEventHandler(bw_DoWork);
-            //bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
-            //bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted);
-            bw.RunWorkerAsync();
-        }
-
-        private void bw_DoWork(object sender, DoWorkEventArgs e)
-        {
-            BackgroundWorker worker = sender as BackgroundWorker;
-
-            Cloud.Instance.AddCalculation(GetUserID(), citiesToVisit);
+            Cloud.Instance.AddCalculation(GetUserID(), GetCitiesToVisit());
         }
 
         private City[] GetCitiesToVisit()
