@@ -29,8 +29,9 @@
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <TextBlock Height="47" HorizontalAlignment="Left" Margin="12,6,0,0" Name="userNameTitleTextBlock"
-                       Text="" VerticalAlignment="Top" Width="438" Style="{StaticResource PhoneTextTitle2Style}"/>
-            <TextBlock Height="30" HorizontalAlignment="Left" Margin="12,78,0,0" Name="calculationsTextBlock" Text="Calculations" VerticalAlignment="Top" Width="438" />
+                       Text="ASDF" VerticalAlignment="Top" Width="438" Style="{StaticResource PhoneTextTitle2Style}"/>
+            <TextBlock Height="30" HorizontalAlignment="Left" Margin="12,78,0,0" Name="calculationsTextBlock"
+                       Text="Calculations:" VerticalAlignment="Top" Width="438" />
             <ListBox Height="409" HorizontalAlignment="Left" Margin="12,114,0,0" Name="calculationsListBox" VerticalAlignment="Top" Width="438" SelectionChanged="calculationsListBox_SelectionChanged"/>
             <Button Content="New calculation" Height="72" HorizontalAlignment="Left" Margin="12,529,0,0" Name="newCalculationButton" VerticalAlignment="Top" Width="438" Click="newCalculationButton_Click" />
         </Grid>
