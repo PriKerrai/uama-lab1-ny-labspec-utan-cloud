@@ -9,11 +9,14 @@ namespace CloudService.TSP
         public int Result { get; private set; }
         public string UserID { get; private set; }
         public int Number { get; private set; }
+        public City[] CitiesToVisit { get; private set; }
 
-        public TSPCalculation(string userID, int number)
+        public TSPCalculation(City[] citiesToVisit, string userID, int number)
         {
+            Result = -1;
             UserID = userID;
             Number = number;
+            CitiesToVisit = citiesToVisit;
         }
 
         public void YoloSwag()
@@ -22,16 +25,12 @@ namespace CloudService.TSP
             System.Threading.Thread.Sleep(5000);
 
             Result = 1;
-
-            Cloud.Cloud.Instance.MoveCalculationToFinished(UserID, Number);
-            Cloud.Cloud.Instance.StoreFinishedCalculation(this);
-            Cloud.Cloud.Instance.NotifyClient(UserID, Number);
         }
 
         //public void Start(int NumberOfNodes)
-        public void Start(City[] citiesToVisit)
+        public void Start()
         {
-            int NumberOfNodes = citiesToVisit.Length;
+            int NumberOfNodes = CitiesToVisit.Length;
 
             int[] x = new int[NumberOfNodes];
             int[] y = new int[NumberOfNodes];

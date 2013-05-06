@@ -3,12 +3,13 @@ using CloudService.LoginService;
 using CloudService.TSP;
 using Microsoft.Phone.Shell;
 using System;
-using System.Linq;
-using System.IO.IsolatedStorage;
-using System.IO;
-using System.Diagnostics;
-using System.ComponentModel;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.IO.IsolatedStorage;
+using System.Linq;
+using System.Threading;
 
 namespace CloudService.Cloud
 {
@@ -46,16 +47,21 @@ namespace CloudService.Cloud
         {
             UserDB.Instance.GetUser(userID).NumCalculations++;
 
-            TSPCalculation calculation = new TSPCalculation(userID, UserDB.Instance.GetUser(userID).NumCalculations);
+            TSPCalculation calculation = new TSPCalculation(citiesToVisit, userID, UserDB.Instance.GetUser(userID).NumCalculations);
             UserDB.Instance.GetUser(userID).ActiveCalculations.Add(calculation);
+
+            StoreOngoingCalculation(calculation);
 
             calculation.YoloSwag();
             //calculation.Start(user, citiesToVisit);
 
+            MoveCalculationToFinished(userID, calculation.Number);
+            StoreFinishedCalculation(calculation);
             UserDB.Instance.StoreUser(UserDB.Instance.GetUser(userID));
+            NotifyClient(userID, calculation.Number);
         }
 
-        public void MoveCalculationToFinished(string userID, int number)
+        private void MoveCalculationToFinished(string userID, int number)
         {
             for (int i = 0; i < UserDB.Instance.GetUser(userID).ActiveCalculations.Count; i++)
             {
@@ -68,7 +74,7 @@ namespace CloudService.Cloud
             }
         }
 
-        public void NotifyClient(string userID, int number)
+        private void NotifyClient(string userID, int number)
         {
             ShellToast toast = new ShellToast();
             toast.Title = "TSP";
@@ -106,23 +112,54 @@ namespace CloudService.Cloud
             return login.CreateUser(user) ? true : false;
         }
 
-        public void StoreFinishedCalculation(TSPCalculation calculation)
+        private void StoreOngoingCalculation(TSPCalculation calculation)
         {
             // File name format: Username-Calc#.txt
             string fileName = calculation.UserID + "-Calc" + calculation.Number + ".txt";
-            Debug.WriteLine("Calculation file: "+calculation.UserID + "-Calc" + calculation.Number + ".txt");
 
-            Debug.WriteLine("Calculation file did not exist, creating file ...");
             using (StreamWriter writer = new StreamWriter(new IsolatedStorageFileStream(fileName, FileMode.Create, FileAccess.Write, IsoFile)))
             {
                 Debug.WriteLine("Writing to calculation file ...");
-                writer.WriteLine("This is calculation number "+calculation.Number+", initiated by user "+calculation.UserID);
+                writer.WriteLine("Calculation number " + calculation.Number);
+                writer.WriteLine("Parameters:");
+                for (int i = 0; i < calculation.CitiesToVisit.Length; i++)
+                {
+                    writer.WriteLine((i+1) + " " + calculation.CitiesToVisit[i].Name);
+                }
                 writer.Close();
             }
             using (StreamReader reader = new StreamReader(new IsolatedStorageFileStream(fileName, FileMode.Open, FileAccess.Read, IsoFile)))
             {
-                Debug.WriteLine("Reading from calculation file ...");
-                Debug.WriteLine("Calculation info: " + reader.ReadLine());
+                string line = "";
+
+                Debug.WriteLine("Reading from ongoing calculation file ...");
+                while ((line = reader.ReadLine()) != null)
+                {
+                    Debug.WriteLine(line);
+                }
+                reader.Close();
+            }
+        }
+
+        private void StoreFinishedCalculation(TSPCalculation calculation)
+        {
+            // File name format: Username-Calc#.txt
+            string fileName = calculation.UserID + "-Calc" + calculation.Number + ".txt";
+
+            using (StreamWriter writer = new StreamWriter(new IsolatedStorageFileStream(fileName, FileMode.Append, FileAccess.Write, IsoFile)))
+            {
+                writer.WriteLine("Result: " + calculation.Result);
+                writer.Close();
+            }
+            using (StreamReader reader = new StreamReader(new IsolatedStorageFileStream(fileName, FileMode.Open, FileAccess.Read, IsoFile)))
+            {
+                string line = "";
+
+                Debug.WriteLine("Reading from finished calculation file ...");
+                while ((line = reader.ReadLine()) != null)
+                {
+                    Debug.WriteLine(line);
+                }
                 reader.Close();
             }
         }
