@@ -36,12 +36,6 @@ namespace CloudService.LoginService
         {
             string line = "";
 
-            // DEBUG Reset DB code ...
-            if (Cloud.Cloud.Instance.IsoFile.FileExists("UserDB.txt"))
-            {
-                Debug.WriteLine("UserDB.txt exists, deleting file ...");
-                Cloud.Cloud.Instance.IsoFile.DeleteFile("UserDB.txt");
-            }
             try
             {
                 using (IsolatedStorageFileStream stream =
@@ -56,7 +50,6 @@ namespace CloudService.LoginService
                         while ((line = reader.ReadLine()) != null)
                         {
                             string[] parts = line.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-                            Debug.WriteLine("User: \"" + parts[0] + "\" : \"" + parts[1] + "\" : \"" + parts[2] + "\"");
                             if (parts[0] != null && parts[0].Length > 0
                                 && parts[1] != null && parts[1].Length > 0)
                                 UserDB.Instance.Users.Add(new User(parts[0], parts[1], Convert.ToInt32(parts[2])));
@@ -75,11 +68,9 @@ namespace CloudService.LoginService
             string[] lines = GetUsers();
 
             char[] delimiters = new char[] { ':' };
-            Debug.WriteLine("Contains user? " + ContainsUser(lines, user.UserID) + ".");
             if (ContainsUser(lines, user.UserID))
             {
                 // Update already existing user
-                Debug.WriteLine("Updating already existing user ...");
                 for (int i = 0; i < lines.Length; i++)
                 {
                     string[] parts = lines[i].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
