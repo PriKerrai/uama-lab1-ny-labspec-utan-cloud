@@ -120,7 +120,7 @@ namespace CloudService.Cloud
             using (StreamWriter writer = new StreamWriter(new IsolatedStorageFileStream(fileName, FileMode.Create, FileAccess.Write, IsoFile)))
             {
                 Debug.WriteLine("Writing to calculation file ...");
-                writer.WriteLine("Calculation number " + calculation.Number);
+                writer.WriteLine("Calculation " + calculation.Number);
                 writer.WriteLine("Parameters:");
                 for (int i = 0; i < calculation.CitiesToVisit.Length; i++)
                 {

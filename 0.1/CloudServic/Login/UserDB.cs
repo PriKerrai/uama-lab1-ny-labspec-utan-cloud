@@ -37,11 +37,11 @@ namespace CloudService.LoginService
             string line = "";
 
             // DEBUG Reset DB code ...
-            if (Cloud.Cloud.Instance.IsoFile.FileExists("UserDB.txt"))
+            /*if (Cloud.Cloud.Instance.IsoFile.FileExists("UserDB.txt"))
             {
                 Debug.WriteLine("UserDB.txt exists, deleting file ...");
                 Cloud.Cloud.Instance.IsoFile.DeleteFile("UserDB.txt");
-            }
+            }*/
             try
             {
                 using (IsolatedStorageFileStream stream =

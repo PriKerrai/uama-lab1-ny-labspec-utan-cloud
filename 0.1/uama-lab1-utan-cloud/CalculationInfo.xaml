@@ -1,0 +1,42 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="uama_lab1_utan_cloud.CalculationInfo"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel contains the name of the application and page title-->
+        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Text="TSP Calculator" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="Calc Info" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
+
+        <!--ContentPanel - place additional content here-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <TextBlock Height="42" HorizontalAlignment="Left" Margin="12,12,0,0" Name="calculationTextBlock"
+                       Text="Calculation: " VerticalAlignment="Top" Width="438" Style="{StaticResource PhoneTextTitle2Style}"/>
+            <TextBlock Height="42" HorizontalAlignment="Left" Margin="12,64,0,0" Name="resultTextBlock"
+                       Text="Result: " VerticalAlignment="Top" Width="438" Style="{StaticResource PhoneTextTitle2Style}"/>
+            <TextBlock Height="42" HorizontalAlignment="Left" Margin="12,144,0,0" Name="inputTextBlock"
+                       Text="Input:" VerticalAlignment="Top" Width="438" Style="{StaticResource PhoneTextTitle2Style}"/>
+            <ListBox Height="404" HorizontalAlignment="Left" Margin="12,191,0,0" Name="inputCitiesListBox"
+                     VerticalAlignment="Top" Width="438" />
+        </Grid>
+    </Grid>
+
+</phone:PhoneApplicationPage>
