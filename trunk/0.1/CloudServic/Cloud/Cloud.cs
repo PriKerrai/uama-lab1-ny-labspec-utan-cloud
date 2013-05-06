@@ -52,8 +52,7 @@ namespace CloudService.Cloud
 
             StoreOngoingCalculation(calculation);
 
-            //calculation.YoloSwag();
-            //calculation.Start(citiesToVisit, userID);
+            calculation.Start();
 
             MoveCalculationToFinished(userID, calculation.Number);
             StoreFinishedCalculation(calculation);
@@ -148,7 +147,7 @@ namespace CloudService.Cloud
 
             using (StreamWriter writer = new StreamWriter(new IsolatedStorageFileStream(fileName, FileMode.Append, FileAccess.Write, IsoFile)))
             {
-                writer.WriteLine("Result: " + calculation.Result);
+                writer.WriteLine("Shortest path: " + calculation.Result);
                 writer.Close();
             }
             using (StreamReader reader = new StreamReader(new IsolatedStorageFileStream(fileName, FileMode.Open, FileAccess.Read, IsoFile)))

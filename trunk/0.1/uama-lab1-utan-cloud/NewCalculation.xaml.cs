@@ -16,8 +16,6 @@ namespace uama_lab1_utan_cloud
 {
     public partial class NewCalculation : PhoneApplicationPage
     {
-        City[] citiesToVisit;
-
         public NewCalculation()
         {
             InitializeComponent();
